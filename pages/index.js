@@ -6,9 +6,7 @@ import { Layout, PageHeader, Tile } from '../components'
 const Index = ({ recipes }) => (
   <Layout>
     <PageHeader title='cookr' subtitle='keep your recipes organized' />
-
     <div className='flex flex-row justify-center align-start'>
-
       {recipes.map((recipe) => (
         <>
           <Link href="/[id]" as={`/${recipe._id}`}>
