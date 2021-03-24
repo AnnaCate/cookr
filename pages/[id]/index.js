@@ -2,54 +2,39 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import dbConnect from '../../utils/dbConnect'
-import Pet from '../../models/Pet'
+import Recipe from '../../models/Recipe'
 
-/* Allows you to view pet card info and delete pet card*/
-const PetPage = ({ pet }) => {
+/* Allows you to view recipe card info and delete recipe card*/
+const RecipePage = ({ recipe }) => {
   const router = useRouter()
   const [message, setMessage] = useState('')
   const handleDelete = async () => {
-    const petID = router.query.id
+    const recipeID = router.query.id
 
     try {
-      await fetch(`/api/pets/${petID}`, {
+      await fetch(`/api/recipes/${recipeID}`, {
         method: 'Delete',
       })
       router.push('/')
     } catch (error) {
-      setMessage('Failed to delete the pet.')
+      setMessage('Failed to delete the recipe.')
     }
   }
 
   return (
-    <div key={pet._id}>
-      <div className="card">
-        <img src={pet.image_url} />
-        <h5 className="pet-name">{pet.name}</h5>
+    <div key={recipe._id}>
+      <div>
+        <img src={recipe.image_url} />
+        <h5>{recipe.title}</h5>
         <div className="main-content">
-          <p className="pet-name">{pet.name}</p>
-          <p className="owner">Owner: {pet.owner_name}</p>
-
-          {/* Extra Pet Info: Likes and Dislikes */}
-          <div className="likes info">
-            <p className="label">Likes</p>
-            <ul>
-              {pet.likes.map((data, index) => (
-                <li key={index}>{data} </li>
-              ))}
-            </ul>
-          </div>
-          <div className="dislikes info">
-            <p className="label">Dislikes</p>
-            <ul>
-              {pet.dislikes.map((data, index) => (
-                <li key={index}>{data} </li>
-              ))}
-            </ul>
-          </div>
+          <p className="pet-name">Category: {recipe.recipeCategory}</p>
+          <p className="owner">Ingredients: {recipe.recipeIngredients}</p>
+          <p className="owner">Instructions: {recipe.recipeInstructions}</p>
+          <p className="owner">Yield: {recipe.recipeYield}</p>
+          <p className="owner">Keywords: {recipe.keywords}</p>
 
           <div className="btn-container">
-            <Link href="/[id]/edit" as={`/${pet._id}/edit`}>
+            <Link href="/[id]/edit" as={`/${recipe._id}/edit`}>
               <button className="btn edit">Edit</button>
             </Link>
             <button className="btn delete" onClick={handleDelete}>
@@ -66,10 +51,10 @@ const PetPage = ({ pet }) => {
 export async function getServerSideProps({ params }) {
   await dbConnect()
 
-  const pet = await Pet.findById(params.id).lean()
-  pet._id = pet._id.toString()
+  const recipe = await Recipe.findById(params.id).lean()
+  recipe._id = recipe._id.toString()
 
-  return { props: { pet } }
+  return { props: { recipe } }
 }
 
-export default PetPage
+export default RecipePage

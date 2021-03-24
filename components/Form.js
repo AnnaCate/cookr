@@ -2,30 +2,27 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { mutate } from 'swr'
 
-const Form = ({ formId, petForm, forNewPet = true }) => {
+const Form = ({ formId, recipeForm, forNewRecipe = true }) => {
   const router = useRouter()
   const contentType = 'application/json'
   const [errors, setErrors] = useState({})
   const [message, setMessage] = useState('')
 
   const [form, setForm] = useState({
-    name: petForm.name,
-    owner_name: petForm.owner_name,
-    species: petForm.species,
-    age: petForm.age,
-    poddy_trained: petForm.poddy_trained,
-    diet: petForm.diet,
-    image_url: petForm.image_url,
-    likes: petForm.likes,
-    dislikes: petForm.dislikes,
+    image_url: recipeForm.image_url,
+    keywords: recipeForm.keywords,
+    recipeCategory: recipeForm.recipeCategory,
+    recipeIngredients: recipeForm.recipeIngredients,
+    recipeInstructions: recipeForm.recipeInstructions,
+    recipeYield: recipeForm.recipeYield,
+    title: recipeForm.title
   })
 
-  /* The PUT method edits an existing entry in the mongodb database. */
   const putData = async (form) => {
     const { id } = router.query
 
     try {
-      const res = await fetch(`/api/pets/${id}`, {
+      const res = await fetch(`/api/recipes/${id}`, {
         method: 'PUT',
         headers: {
           Accept: contentType,
@@ -34,24 +31,20 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
         body: JSON.stringify(form),
       })
 
-      // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status)
-      }
+      if (!res.ok) throw new Error(res.status)
 
       const { data } = await res.json()
 
-      mutate(`/api/pets/${id}`, data, false) // Update the local data without a revalidation
+      mutate(`/api/recipes/${id}`, data, false) // Update the local data without a revalidation
       router.push('/')
     } catch (error) {
-      setMessage('Failed to update pet')
+      setMessage('Failed to update recipe')
     }
   }
 
-  /* The POST method adds a new entry in the mongodb database. */
   const postData = async (form) => {
     try {
-      const res = await fetch('/api/pets', {
+      const res = await fetch('/api/recipes', {
         method: 'POST',
         headers: {
           Accept: contentType,
@@ -60,26 +53,20 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
         body: JSON.stringify(form),
       })
 
-      // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status)
-      }
-
+      if (!res.ok) throw new Error(res.status)
+    
       router.push('/')
     } catch (error) {
-      setMessage('Failed to add pet')
+      setMessage('Failed to add recipe')
     }
   }
 
   const handleChange = (e) => {
     const target = e.target
-    const value =
-      target.name === 'poddy_trained' ? target.checked : target.value
-    const name = target.name
 
     setForm({
       ...form,
-      [name]: value,
+      [target.name]: target.value,
     })
   }
 
@@ -87,105 +74,98 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
     e.preventDefault()
     const errs = formValidate()
     if (Object.keys(errs).length === 0) {
-      forNewPet ? postData(form) : putData(form)
+      forNewRecipe ? postData(form) : putData(form)
     } else {
       setErrors({ errs })
     }
   }
 
-  /* Makes sure pet info is filled for pet name, owner name, species, and image url*/
   const formValidate = () => {
     let err = {}
-    if (!form.name) err.name = 'Name is required'
-    if (!form.owner_name) err.owner_name = 'Owner is required'
-    if (!form.species) err.species = 'Species is required'
-    if (!form.image_url) err.image_url = 'Image URL is required'
+    if (!form.title) err.name = 'Title is required'
     return err
   }
 
   return (
     <>
-      <form id={formId} onSubmit={handleSubmit}>
-        <label htmlFor="name">Name</label>
+      <form id={formId} onSubmit={handleSubmit} className="flex flex-col">
+        <div className="flex w-1/2">
+        <label htmlFor="title">Title</label>
         <input
+          className="border rounded-md"
           type="text"
-          maxLength="20"
-          name="name"
-          value={form.name}
+          name="title"
+          value={form.title}
           onChange={handleChange}
           required
         />
+        </div>
+        <div className="flex w-1/2">
 
-        <label htmlFor="owner_name">Owner</label>
+        <label htmlFor="recipeCategory">Category</label>
         <input
-          type="text"
-          maxLength="20"
-          name="owner_name"
-          value={form.owner_name}
+                    className="border rounded-md"
+                    type="text"
+          name="recipeCategory"
+          value={form.recipeCategory}
           onChange={handleChange}
-          required
         />
+</div>
+<div className="flex w-1/2">
 
-        <label htmlFor="species">Species</label>
+        <label htmlFor="recipeIngredients">Ingredients</label>
         <input
-          type="text"
-          maxLength="30"
-          name="species"
-          value={form.species}
+                    className="border rounded-md"
+                    type="text"
+          name="recipeIngredients"
+          value={form.recipeIngredients}
           onChange={handleChange}
-          required
         />
+</div>
+<div className="flex w-1/2">
 
-        <label htmlFor="age">Age</label>
+        <label htmlFor="recipeInstructions">Instructions</label>
         <input
-          type="number"
-          name="age"
-          value={form.age}
+                    className="border rounded-md"
+                    type="text"
+          name="recipeInstructions"
+          value={form.recipeInstructions}
           onChange={handleChange}
         />
+</div>
+<div className="flex w-1/2">
 
-        <label htmlFor="poddy_trained">Potty Trained</label>
+        <label htmlFor="recipeYield">Yield</label>
         <input
-          type="checkbox"
-          name="poddy_trained"
-          checked={form.poddy_trained}
+                    className="border rounded-md"
+                    type="text"
+          name="recipeYield"
+          checked={form.recipeYield}
           onChange={handleChange}
         />
-
-        <label htmlFor="diet">Diet</label>
-        <textarea
-          name="diet"
-          maxLength="60"
-          value={form.diet}
-          onChange={handleChange}
-        />
+</div>
+<div className="flex w-1/2">
 
         <label htmlFor="image_url">Image URL</label>
         <input
-          type="url"
-          name="image_url"
-          value={form.image_url}
+                  className="border rounded-md"
+                  type="url"
+          name="image"
+          value={form.image}
           onChange={handleChange}
-          required
         />
+</div>
+<div className="flex w-1/2">
 
-        <label htmlFor="likes">Likes</label>
+        <label htmlFor="keywords">Keywords</label>
         <textarea
-          name="likes"
-          maxLength="60"
-          value={form.likes}
+                   className="border rounded-md"
+                   name="keywords"
+          value={form.keywords}
           onChange={handleChange}
         />
-
-        <label htmlFor="dislikes">Dislikes</label>
-        <textarea
-          name="dislikes"
-          maxLength="60"
-          value={form.dislikes}
-          onChange={handleChange}
-        />
-
-        <button type="submit" className="btn">
+</div>
+        <button type="submit">
           Submit
         </button>
       </form>
