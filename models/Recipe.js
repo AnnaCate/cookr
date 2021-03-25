@@ -7,7 +7,7 @@ const RecipeSchema = new mongoose.Schema({
   },
   submittedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   image: {
     type: String,
@@ -22,10 +22,10 @@ const RecipeSchema = new mongoose.Schema({
     type: Array,
   },
   recipeInstructions: {
-    type: String
+    type: String,
   },
   recipeYield: {
-    type: String
+    type: String,
   },
   title: {
     type: String,

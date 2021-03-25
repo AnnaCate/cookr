@@ -1,4 +1,4 @@
-import Form from '../components/Form'
+import { Form, Layout } from '../components'
 
 const NewRecipe = () => {
   const recipeForm = {
@@ -8,9 +8,13 @@ const NewRecipe = () => {
     recipeIngredients: [],
     recipeInstructions: '',
     recipeYield: '',
-    title: ''
+    title: '',
   }
-  return <Form formId="add-recipe-form" recipeForm={recipeForm} />
+  return (
+    <Layout>
+      <Form formId="add-recipe-form" recipeForm={recipeForm} />
+    </Layout>
+  )
 }
 
 export default NewRecipe

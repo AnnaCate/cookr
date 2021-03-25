@@ -5,12 +5,12 @@ import { FaRegPlusSquare } from 'react-icons/fa'
 export function NavBar(props) {
   return (
     <nav
-      className='bg-white min-h-3-1/4 relative z-30'
+      className='bg-white relative z-30'
       role='navigation'
       aria-label='main navigation'>
       <div
         id='navbar'
-        className='bg-white shadow py-2 pl-4 hidden md:flex md:items-stretch md:flex-grow md:flex-shrink-0'>
+        className='bg-white shadow py-2 pl-4 flex items-stretch flex-grow flex-shrink-0'>
         <div className='justify-start mr-auto items-stretch flex'>
         <Link href="/">
 <a className='cursor-pointer items-center flex flex-grow-0 flex-shrink-0 text-gray-700 py-2 px-4 relative no-underline'>

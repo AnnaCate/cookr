@@ -27,7 +27,9 @@ const RecipePage = ({ recipe }) => {
         <img src={recipe.image_url} />
         <h5>{recipe.title}</h5>
         <div className="main-content">
-          <p className="pet-name">Category: {recipe.recipeCategory}</p>
+          <p className="recipe-name">
+            Category: {JSON.stringify(recipe.recipeCategory)}
+          </p>
           <p className="owner">Ingredients: {recipe.recipeIngredients}</p>
           <p className="owner">Instructions: {recipe.recipeInstructions}</p>
           <p className="owner">Yield: {recipe.recipeYield}</p>
