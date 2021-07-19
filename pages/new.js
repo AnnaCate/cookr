@@ -1,3 +1,4 @@
+import React from 'react'
 import { Form, Layout } from '../components'
 
 const NewRecipe = () => {

@@ -1,3 +1,4 @@
+import React from 'react'
 import Link from 'next/link'
 import dbConnect from '../utils/dbConnect'
 import Recipe from '../models/Recipe'
