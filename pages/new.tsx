@@ -1,18 +1,20 @@
 import React from 'react'
 import { Form, Layout } from '../components'
+import { Recipe } from '../types'
 
 const NewRecipe = () => {
-  const recipeForm = {
+  const recipeForm: Recipe.Base = {
+    description: '',
     image: '',
     keywords: [],
     cookTime: '',
     prepTime: '',
     totalTime: '',
-    recipeCategory: [],
-    recipeIngredients: [],
-    recipeInstructions: '',
+    recipeCategory: '',
+    recipeIngredients: [{header: '', recipeIngredient: ''}],
+    recipeInstructions: [{text: '', url: ''}],
     recipeYield: '',
-    title: '',
+    name: '',
   }
   return (
     <Layout>

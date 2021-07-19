@@ -7,7 +7,8 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>cookr recipe app</title>
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <title>cookr</title>
       </Head>
       <Component {...pageProps} />
     </>

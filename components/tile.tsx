@@ -1,6 +1,7 @@
 import React from 'react';
+import { Tile as TileProps } from '../types'
 
-export function Tile({img, difficulty, meal, title, user}) {
+export function Tile({img, difficulty, meal, title, user}: TileProps) {
   return (
     <div className='w-full h-72 overflow-hidden rounded border bg-white shadow m-1 md:m-4 transform transition duration-300 hover:shadow-md hover:scale-105'>
       <div className='relative'>

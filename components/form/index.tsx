@@ -5,20 +5,22 @@ import { mutate } from 'swr'
 import { FaRegPlusSquare } from 'react-icons/fa'
 
 import { Input } from './input'
+import { Recipe } from '../../types'
 
-export function Form({ formId, recipeForm, forNewRecipe = true }) {
+export function Form({ formId, recipeForm, forNewRecipe = true }: {formId: string, recipeForm: Recipe.Base | Recipe.Existing, forNewRecipe?: boolean}) {
   const router = useRouter()
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<Recipe.Base>({
+    description: recipeForm.description,
     image: recipeForm.image,
-    // keywords: recipeForm.keywords,
-    name: recipeForm.title,
+    keywords: recipeForm.keywords,
+    name: recipeForm.name,
     cookTime: recipeForm.cookTime,
     prepTime: recipeForm.prepTime,
     totalTime: recipeForm.totalTime,
     recipeCategory: recipeForm.recipeCategory,
-    // recipeIngredients: recipeForm.recipeIngredients,
-    // recipeInstructions: recipeForm.recipeInstructions,
+    recipeIngredients: recipeForm.recipeIngredients,
+    recipeInstructions: recipeForm.recipeInstructions,
     recipeYield: recipeForm.recipeYield,
   })
   const [ingredientsSubSections, setIngredientsSubSections] = React.useState(
@@ -55,11 +57,12 @@ export function Form({ formId, recipeForm, forNewRecipe = true }) {
         type="text"
         name="subheader-1"
         placeholder="Subheader (Optional)"
+        value={form.recipeIngredients[0].header}
       />
       <textarea
         className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300"
         name="recipeIngredients"
-        value={form.recipeIngredients}
+        value={form.recipeIngredients[0].recipeIngredient}
         rows={5}
         onChange={handleChange}
         placeholder="Type each ingredient on a separate line"
@@ -78,7 +81,7 @@ export function Form({ formId, recipeForm, forNewRecipe = true }) {
         },
         body: JSON.stringify(form),
       })
-      if (!res.ok) throw new Error(res.status)
+      if (!res.ok) throw new Error(res.statusText)
       const { data } = await res.json()
       mutate(`/api/recipes/${id}`, data, false)
       router.push('/')
@@ -97,7 +100,7 @@ export function Form({ formId, recipeForm, forNewRecipe = true }) {
         },
         body: JSON.stringify(form),
       })
-      if (!res.ok) throw new Error(res.status)
+      if (!res.ok) throw new Error(res.statusText)
 
       router.push('/')
     } catch (error) {}
@@ -118,7 +121,7 @@ export function Form({ formId, recipeForm, forNewRecipe = true }) {
     e.preventDefault()
     const errs = formValidate()
     if (Object.keys(errs).length === 0) {
-      forNewRecipe ? await postData(form) : await putData(forms)
+      forNewRecipe ? await postData(form) : await putData(form)
     } else {
       console.error(errs)
     }
@@ -126,7 +129,11 @@ export function Form({ formId, recipeForm, forNewRecipe = true }) {
 
   const formValidate = () => {
     let err = {}
+    // @ts-ignore
     if (!form.name) err.name = 'Title is required'
+    if (!form.recipeCategory)
+    // @ts-ignore
+      err.recipeCategory = 'Recipe category is required.'
     return err
   }
   console.log(form)
@@ -191,7 +198,7 @@ export function Form({ formId, recipeForm, forNewRecipe = true }) {
                   className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
                   name="recipeInstructions"
                   rows={5}
-                  value={form.recipeInstructions}
+                  value={form.recipeInstructions[0].text}
                   onChange={handleChange}
                 />
               </div>
