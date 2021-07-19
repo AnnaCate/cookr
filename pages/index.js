@@ -5,22 +5,25 @@ import { Layout, PageHeader, Tile } from '../components'
 
 const Index = ({ recipes }) => (
   <Layout>
-    <PageHeader title='cookr' subtitle='keep your recipes organized' />
-    <div className='flex flex-row justify-center align-start'>
+    <PageHeader title="cookr" subtitle="keep your recipes organized" />
+    <div className="flex flex-row flex-wrap justify-center align-start w-full">
       {recipes.map((recipe) => (
-        <>
-          <Link href="/[id]" as={`/${recipe._id}`}>
-            <a>
-              <Tile key={recipe._id} img={recipe.image} title={recipe.title} user={"Anna"} />
-            </a>
-          </Link>
-        </>
+        <Link href="/[id]" as={`/${recipe._id}`}>
+          <a className="pr-4 w-1/2 md:w-full max-w-xs">
+            <Tile
+              key={recipe._id}
+              img={recipe.image}
+              title={recipe.name}
+              user={'Anna'}
+            />
+          </a>
+        </Link>
       ))}
     </div>
   </Layout>
 )
 
-export async function getServerSideProps () {
+export async function getServerSideProps() {
   await dbConnect()
 
   const result = await Recipe.find({})

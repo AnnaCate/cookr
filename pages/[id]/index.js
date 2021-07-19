@@ -4,42 +4,42 @@ import Link from 'next/link'
 import dbConnect from '../../utils/dbConnect'
 import Recipe from '../../models/Recipe'
 
-/* Allows you to view recipe card info and delete recipe card*/
-const RecipePage = ({ recipe }) => {
+export default function RecipeDetails({ recipe }) {
   const router = useRouter()
   const [message, setMessage] = useState('')
+
   const handleDelete = async () => {
     const recipeID = router.query.id
 
     try {
       await fetch(`/api/recipes/${recipeID}`, {
-        method: 'Delete',
+        method: 'DELETE',
       })
       router.push('/')
     } catch (error) {
+      console.error(error)
       setMessage('Failed to delete the recipe.')
     }
   }
 
   return (
     <div key={recipe._id}>
+      <img src={recipe.image_url} />
+      <h1>{recipe.title}</h1>
       <div>
-        <img src={recipe.image_url} />
-        <h5>{recipe.title}</h5>
-        <div className="main-content">
-          <p className="recipe-name">
-            Category: {JSON.stringify(recipe.recipeCategory)}
-          </p>
-          <p className="owner">Ingredients: {recipe.recipeIngredients}</p>
-          <p className="owner">Instructions: {recipe.recipeInstructions}</p>
-          <p className="owner">Yield: {recipe.recipeYield}</p>
-          <p className="owner">Keywords: {recipe.keywords}</p>
-
-          <div className="btn-container">
+        <p>Category: {JSON.stringify(recipe.recipeCategory)}</p>
+        <p>Ingredients: {recipe.recipeIngredients}</p>
+        <p>Instructions: {recipe.recipeInstructions}</p>
+        <p>Yield: {recipe.recipeYield}</p>
+        <p>Keywords: {recipe.keywords}</p>
+        <div className="flex flex-row">
+          <div className="mr-4 p-4">
             <Link href="/[id]/edit" as={`/${recipe._id}/edit`}>
-              <button className="btn edit">Edit</button>
+              <a>Edit</a>
             </Link>
-            <button className="btn delete" onClick={handleDelete}>
+          </div>
+          <div className="p-4">
+            <button type="button" onClick={handleDelete}>
               Delete
             </button>
           </div>
@@ -58,5 +58,3 @@ export async function getServerSideProps({ params }) {
 
   return { props: { recipe } }
 }
-
-export default RecipePage

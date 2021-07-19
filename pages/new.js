@@ -4,6 +4,9 @@ const NewRecipe = () => {
   const recipeForm = {
     image: '',
     keywords: [],
+    cookTime: '',
+    prepTime: '',
+    totalTime: '',
     recipeCategory: [],
     recipeIngredients: [],
     recipeInstructions: '',

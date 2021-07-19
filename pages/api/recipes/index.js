@@ -14,18 +14,20 @@ export default async function handler(req, res) {
         ) /* find all the data in our database */
         res.status(200).json({ success: true, data: recipes })
       } catch (error) {
-        res.status(400).json({ success: false })
+        res.status(500).json({ success: false })
       }
       break
     case 'POST':
       try {
-        const recipe = await Recipe.create({
-          ...req.body,
-          dateCreated: new Date(),
-        }) /* create a new model in the database */
+        console.log(req.body)
+        const recipe = await Recipe.create(
+          req.body,
+        ) /* create a new model in the database */
+        console.log('recipe', recipe)
         res.status(201).json({ success: true, data: recipe })
       } catch (error) {
-        res.status(400).json({ success: false })
+        console.log(error)
+        res.status(500).json({ success: false })
       }
       break
     default:

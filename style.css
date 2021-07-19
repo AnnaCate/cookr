@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* FORM COMPONENTS */
+  .c-input-wrapper {
+    @apply mb-6;
+  }
+
+  .c-input {
+    @apply w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300;
+  }
+
+  .c-input-label {
+    @apply block mb-2 text-sm text-gray-600 font-bold;
+  }
+}
