@@ -11,7 +11,7 @@ const NewRecipe = () => {
     prepTime: '',
     totalTime: '',
     recipeCategory: '',
-    recipeIngredients: [{header: '', recipeIngredient: ''}],
+    ingredients: [{header: '', id: 1, ingredients: ['']}],
     recipeInstructions: [{text: '', url: ''}],
     recipeYield: '',
     name: '',

@@ -12,7 +12,7 @@ export namespace Recipe {
     prepTime?: string
     recipeCategory: string
     recipeCuisine?: string
-    recipeIngredients: Ingredient[]
+    ingredients: IngredientSection[]
     recipeInstructions: Step[]
     recipeYield?: string
     similarRecipes?: string[]
@@ -22,14 +22,16 @@ export namespace Recipe {
 
   interface Existing extends Base {
     _id: string
+    recipeIngredient: string[]
     datePublished: Date
     submittedBy: string
   }
 }
 
-interface Ingredient {
+export interface IngredientSection {
+  id: number
   header: string
-  recipeIngredient: string
+  ingredients: string[]
 }
 
 interface Nutrition {

@@ -14,15 +14,10 @@ export function Tile({img, difficulty, meal, title, user}: TileProps) {
       </div>
       <div className='p-3'>
         <h3 className='text-sm truncate-2nd'>
-          <a className='hover:text-blue-500' href='#'>
             {title}
-          </a>
         </h3>
         <p className='text-xs text-gray-500'>
-          Submitted by:{' '}
-          <a href='#' className='hover:underline hover:text-blue-500'>
-            {user.name}
-          </a>
+          Submitted by: {user.name}
         </p>
       </div>
     </div>

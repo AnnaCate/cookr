@@ -1,13 +1,52 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
+import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import { mutate } from 'swr'
-import { FaRegPlusSquare } from 'react-icons/fa'
-
+import { FaRegPlusSquare, FaTimesCircle } from 'react-icons/fa'
 import { Input } from './input'
-import { Recipe } from '../../types'
+import { Recipe, IngredientSection } from '../../types'
 
-export function Form({ formId, recipeForm, forNewRecipe = true }: {formId: string, recipeForm: Recipe.Base | Recipe.Existing, forNewRecipe?: boolean}) {
+const IngredientsSubSection = ({
+  handleChange,
+  idx,
+  state,
+}: {
+  handleChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    idx: number,
+  ) => void
+  idx: number
+  state: Recipe.Base
+}) => (
+  <>
+    <input
+      className="c-input mb-1"
+      type="text"
+      name="header"
+      onChange={(e) => handleChange(e, idx)}
+      placeholder="Subheader (Optional)"
+      value={state.ingredients[idx].header}
+    />
+    <textarea
+      className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300"
+      name="ingredients"
+      value={state.ingredients[idx].ingredients.join('\r\n')}
+      rows={5}
+      onChange={(e) => handleChange(e, idx)}
+      placeholder="Type each ingredient on a separate line"
+    />
+  </>
+)
+
+export function Form({
+  formId,
+  recipeForm,
+  forNewRecipe = true,
+}: {
+  formId: string
+  recipeForm: Recipe.Base | Recipe.Existing
+  forNewRecipe?: boolean
+}) {
   const router = useRouter()
 
   const [form, setForm] = useState<Recipe.Base>({
@@ -19,13 +58,10 @@ export function Form({ formId, recipeForm, forNewRecipe = true }: {formId: strin
     prepTime: recipeForm.prepTime,
     totalTime: recipeForm.totalTime,
     recipeCategory: recipeForm.recipeCategory,
-    recipeIngredients: recipeForm.recipeIngredients,
+    ingredients: recipeForm.ingredients,
     recipeInstructions: recipeForm.recipeInstructions,
     recipeYield: recipeForm.recipeYield,
   })
-  const [ingredientsSubSections, setIngredientsSubSections] = React.useState(
-    recipeForm.recipeIngredients.length || 1,
-  )
 
   const CategoryItem = ({ value }) => {
     const valueLower = value.toLowerCase()
@@ -50,25 +86,21 @@ export function Form({ formId, recipeForm, forNewRecipe = true }: {formId: strin
     )
   }
 
-  const IngredientsSubSection = () => (
-    <>
-      <input
-        className="c-input"
-        type="text"
-        name="subheader-1"
-        placeholder="Subheader (Optional)"
-        value={form.recipeIngredients[0].header}
-      />
-      <textarea
-        className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300"
-        name="recipeIngredients"
-        value={form.recipeIngredients[0].recipeIngredient}
-        rows={5}
-        onChange={handleChange}
-        placeholder="Type each ingredient on a separate line"
-      />
-    </>
-  )
+  const handleIngrChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    idx: number,
+  ): void => {
+    const ingredients = [...form.ingredients]
+    const newIngrSection = { ...ingredients[idx] }
+    newIngrSection[e.target.name] = e.target.value
+    ingredients[idx] = newIngrSection
+    setForm({ ...form, ingredients })
+  }
+
+  const handleRemoveIngrSection = (x: IngredientSection) => {
+    const ingredients = form.ingredients.filter(ingredient => ingredient.id !== x.id)
+    setForm({ ...form, ingredients })
+  }
 
   const putData = async (form) => {
     const { id } = router.query
@@ -113,10 +145,6 @@ export function Form({ formId, recipeForm, forNewRecipe = true }: {formId: strin
     })
   }
 
-  const handleAddIngredientsSection = () => {
-    setIngredientsSubSections(ingredientsSubSections + 1)
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     const errs = formValidate()
@@ -132,11 +160,12 @@ export function Form({ formId, recipeForm, forNewRecipe = true }: {formId: strin
     // @ts-ignore
     if (!form.name) err.name = 'Title is required'
     if (!form.recipeCategory)
-    // @ts-ignore
+      // @ts-ignore
       err.recipeCategory = 'Recipe category is required.'
     return err
   }
   console.log(form)
+
   return (
     <div className="flex items-center">
       <div className="container mx-auto">
@@ -170,18 +199,43 @@ export function Form({ formId, recipeForm, forNewRecipe = true }: {formId: strin
                     'Beverage',
                     'Other',
                   ].map((cat) => (
-                    <CategoryItem value={cat} />
+                    <CategoryItem key={cat} value={cat} />
                   ))}
                 </div>
               </fieldset>
               <div className="c-input-wrapper">
-                <label className="c-input-label" htmlFor="recipeIngredients">
+                <label className="c-input-label" htmlFor="ingredients">
                   Ingredients
                 </label>
-                {Array(ingredientsSubSections).fill(<IngredientsSubSection />)}
+                {form.ingredients.map((ingredient, idx) => (
+                    <div key={ingredient.id} className="group relative">
+                      <IngredientsSubSection
+                        idx={idx}
+                        state={form}
+                        handleChange={(e) => handleIngrChange(e, idx)}
+                      />
+                      <button
+                        type="button"
+                        className="hidden group-hover:inline absolute -top-1 -right-1 text-red-400 bg-white"
+                        onClick={() => {
+                          handleRemoveIngrSection(ingredient)
+                        }}
+                      >
+                        <FaTimesCircle />
+                      </button>
+                    </div>
+                  ))}
                 <button
                   className="py-1 px-3 flex items-center justify-center text-white bg-gray-400 rounded-md focus:bg-gray-500 focus:outline-none"
-                  onClick={handleAddIngredientsSection}
+                  onClick={() => {
+                    setForm({
+                      ...form,
+                      ingredients: [
+                        ...form.ingredients,
+                        { header: '', id: uuid(), ingredients: [''] },
+                      ],
+                    })
+                  }}
                   type="button"
                 >
                   <>
