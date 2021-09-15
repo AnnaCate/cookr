@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const IngredientSchema = new mongoose.Schema({
   header: String,
-  ingredients: [String],
+  ingredients: String,
 })
 
 const NutritionSchema = new mongoose.Schema({
@@ -18,11 +18,6 @@ const NutritionSchema = new mongoose.Schema({
   sugarContent: String,
   transFatContent: String,
   unsaturatedFatContent: String,
-})
-
-const StepSchema = new mongoose.Schema({
-  text: String,
-  url: String,
 })
 
 const RecipeSchema = new mongoose.Schema({
@@ -56,7 +51,7 @@ const RecipeSchema = new mongoose.Schema({
   recipeCuisine: String,
   recipeIngredient: [String],
   ingredients: [IngredientSchema],
-  recipeInstructions: [StepSchema],
+  recipeInstructions: String,
   recipeYield: String,
   similarRecipes: {
     type: [mongoose.Schema.Types.ObjectId],

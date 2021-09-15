@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import { compose, map } from 'lodash/fp'
 import dbConnect from '../utils/dbConnect'
 import { default as RecipeModel }  from '../models/Recipe'
 import { Layout, PageHeader, Tile } from '../components'
@@ -39,8 +38,7 @@ export async function getServerSideProps(): Promise<{
     return {
       ...recipe,
       _id: recipe._id.toString(),
-      recipeIngredients: recipe.recipeIngredients.map(v => ({...v, _id: v._id.toString()})),
-      recipeInstructions: recipe.recipeInstructions.map(v => ({...v, _id: v._id.toString()})),
+      ingredients: recipe.ingredients.map(v => ({...v, _id: v._id.toString()})),
     }
   })
   return { props: { recipes } }

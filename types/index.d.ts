@@ -13,7 +13,7 @@ export namespace Recipe {
     recipeCategory: string
     recipeCuisine?: string
     ingredients: IngredientSection[]
-    recipeInstructions: Step[]
+    recipeInstructions: string
     recipeYield?: string
     similarRecipes?: string[]
     suitableForDiet?: string[]
@@ -31,7 +31,7 @@ export namespace Recipe {
 export interface IngredientSection {
   id: number
   header: string
-  ingredients: string[]
+  ingredients: string
 }
 
 interface Nutrition {
@@ -47,11 +47,6 @@ interface Nutrition {
   sugarContent: string,
   transFatContent: string,
   unsaturatedFatContent: string,
-}
-
-interface Step {
-  text: string
-  url: string
 }
 
 export interface Tile {

@@ -28,9 +28,10 @@ const IngredientsSubSection = ({
       value={state.ingredients[idx].header}
     />
     <textarea
-      className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300"
+      className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 whitespace-pre-wrap"
       name="ingredients"
-      value={state.ingredients[idx].ingredients.join('\r\n')}
+      // value={state.ingredients[idx].ingredients.join('\r\n')}
+      value={state.ingredients[idx].ingredients}
       rows={5}
       onChange={(e) => handleChange(e, idx)}
       placeholder="Type each ingredient on a separate line"
@@ -95,7 +96,7 @@ export function Form({
     newIngrSection[e.target.name] = e.target.value
     ingredients[idx] = newIngrSection
     setForm({ ...form, ingredients })
-  }
+}
 
   const handleRemoveIngrSection = (x: IngredientSection) => {
     const ingredients = form.ingredients.filter(ingredient => ingredient.id !== x.id)
@@ -186,6 +187,18 @@ export function Form({
                 name="name"
                 value={form.name}
               />
+              <div className="mb-6">
+                <label className="c-input-label" htmlFor="recipeInstructions">
+                  Description
+                </label>
+                <textarea
+                  className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
+                  name="description"
+                  rows={3}
+                  value={form.description}
+                  onChange={handleChange}
+                />
+              </div>
               <fieldset className="c-input-wrapper">
                 <legend className="c-input-label">Category</legend>
                 <div className="flex justify-between flex-wrap px-4">
@@ -232,7 +245,7 @@ export function Form({
                       ...form,
                       ingredients: [
                         ...form.ingredients,
-                        { header: '', id: uuid(), ingredients: [''] },
+                        { header: '', id: uuid(), ingredients: '' },
                       ],
                     })
                   }}
@@ -252,7 +265,7 @@ export function Form({
                   className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
                   name="recipeInstructions"
                   rows={5}
-                  value={form.recipeInstructions[0].text}
+                  value={form.recipeInstructions}
                   onChange={handleChange}
                 />
               </div>
@@ -262,24 +275,32 @@ export function Form({
                 name="recipeYield"
                 value={form.recipeYield}
               />
-              <Input
-                handleChange={handleChange}
-                label="Active Time"
-                name="prepTime"
-                value={form.prepTime}
-              />
-              <Input
-                handleChange={handleChange}
-                label="Cook Time"
-                name="cookTime"
-                value={form.cookTime}
-              />
-              <Input
-                handleChange={handleChange}
-                label="Total Time"
-                name="totalTime"
-                value={form.totalTime}
-              />
+              <div className="flex">
+                <div className="pr-4">
+                <Input
+                  handleChange={handleChange}
+                  label="Active Time"
+                  name="prepTime"
+                  value={form.prepTime}
+                />
+                </div>
+                <div className="pr-4">
+                <Input
+                  handleChange={handleChange}
+                  label="Cook Time"
+                  name="cookTime"
+                  value={form.cookTime}
+                />
+                </div>
+                <div>
+                <Input
+                  handleChange={handleChange}
+                  label="Total Time"
+                  name="totalTime"
+                  value={form.totalTime}
+                />
+                </div>
+              </div>
               <Input
                 type="url"
                 id="image"

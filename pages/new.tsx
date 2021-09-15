@@ -1,4 +1,6 @@
 import React from 'react'
+import { v4 as uuid } from 'uuid'
+
 import { Form, Layout } from '../components'
 import { Recipe } from '../types'
 
@@ -11,8 +13,8 @@ const NewRecipe = () => {
     prepTime: '',
     totalTime: '',
     recipeCategory: '',
-    ingredients: [{header: '', id: 1, ingredients: ['']}],
-    recipeInstructions: [{text: '', url: ''}],
+    ingredients: [{header: '', id: uuid(), ingredients: ''}],
+    recipeInstructions: '',
     recipeYield: '',
     name: '',
   }
