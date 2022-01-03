@@ -20,16 +20,17 @@ const EditRecipe = () => {
   if (!recipe) return <p>Loading...</p>
 
   const recipeForm = {
+    description: recipe.description,
     image: recipe.image,
     keywords: recipe.keywords,
-    cookTime: recipeForm.cookTime,
-    prepTime: recipeForm.prepTime,
-    totalTime: recipeForm.totalTime,
+    cookTime: recipe.cookTime,
+    prepTime: recipe.prepTime,
+    totalTime: recipe.totalTime,
     recipeCategory: recipe.recipeCategory,
-    recipeIngredients: recipe.recipeIngredients,
+    ingredients: recipe.ingredients,
     recipeInstructions: recipe.recipeInstructions,
     recipeYield: recipe.recipeYield,
-    title: recipe.recipeTitle,
+    name: recipe.name,
   }
 
   return (

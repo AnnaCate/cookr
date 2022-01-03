@@ -13,6 +13,6 @@
   }
 
   .c-input-label {
-    @apply block mb-2 text-sm text-gray-600 font-bold;
+    @apply block mb-2 text-base text-gray-600 font-bold;
   }
 }

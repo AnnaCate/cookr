@@ -22,7 +22,6 @@ export namespace Recipe {
 
   interface Existing extends Base {
     _id: string
-    recipeIngredient: string[]
     datePublished: Date
     submittedBy: string
   }
