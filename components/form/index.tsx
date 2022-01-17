@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import { mutate } from 'swr'
+import { useUser } from '@auth0/nextjs-auth0'
+
 import { FaRegPlusSquare, FaTimesCircle } from 'react-icons/fa'
 import { Input } from './input'
 import { Recipe, IngredientSection } from '../../types'
@@ -52,6 +54,7 @@ export function Form({
   forNewRecipe?: boolean
 }) {
   const router = useRouter()
+  const { user } = useUser()
 
   const [form, setForm] = useState<Recipe.Base>({
     description: recipeForm.description,
@@ -127,6 +130,11 @@ export function Form({
   }
 
   const postData = async (form) => {
+    const finalForm = {
+      ...form,
+      submittedBy: user.sub
+    }
+    
     try {
       const res = await fetch('/api/recipes', {
         method: 'POST',
@@ -134,7 +142,7 @@ export function Form({
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify(finalForm),
       })
       if (!res.ok) throw new Error(res.statusText)
 

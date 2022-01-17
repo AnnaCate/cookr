@@ -1,16 +1,15 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
+import { withPageAuthRequired, useUser } from '@auth0/nextjs-auth0'
 import { Form } from '../../components'
 
-const fetcher = (url) =>
-  fetch(url)
-    .then((res) => res.json())
-    .then((json) => json.data)
-
-const EditRecipe = () => {
+function EditRecipe() {
   const router = useRouter()
   const { id } = router.query
+
+  const { user } = useUser()
+
   const { data: recipe, error } = useSWR(
     id ? `/api/recipes/${id}` : null,
     fetcher,
@@ -18,19 +17,21 @@ const EditRecipe = () => {
 
   if (error) return <p>Failed to load</p>
   if (!recipe) return <p>Loading...</p>
+  // if (recipe && recipe.submittedBy.sub !== user.sub) return <p>Unauthorized</p>
 
   const recipeForm = {
+    cookTime: recipe.cookTime,
     description: recipe.description,
     image: recipe.image,
-    keywords: recipe.keywords,
-    cookTime: recipe.cookTime,
-    prepTime: recipe.prepTime,
-    totalTime: recipe.totalTime,
-    recipeCategory: recipe.recipeCategory,
     ingredients: recipe.ingredients,
+    keywords: recipe.keywords,
+    name: recipe.name,
+    prepTime: recipe.prepTime,
+    recipeCategory: recipe.recipeCategory,
     recipeInstructions: recipe.recipeInstructions,
     recipeYield: recipe.recipeYield,
-    name: recipe.name,
+    submittedBy: recipe.submittedBy,
+    totalTime: recipe.totalTime,
   }
 
   return (
@@ -42,4 +43,9 @@ const EditRecipe = () => {
   )
 }
 
-export default EditRecipe
+const fetcher = (url) =>
+  fetch(url)
+    .then((res) => res.json())
+    .then((json) => json.data)
+
+export default withPageAuthRequired(EditRecipe)

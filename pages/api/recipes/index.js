@@ -9,8 +9,8 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const recipes = await Recipe.find(
-          {},
+        const recipes = await Recipe.find({}).populate(
+          'submittedBy',
         ) /* find all the data in our database */
         res.status(200).json({ success: true, data: recipes })
       } catch (error) {

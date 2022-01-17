@@ -16,7 +16,7 @@ const Index = ({ recipes }: {recipes: Recipe.Existing[]}) => (
               key={recipe._id}
               img={recipe.image}
               title={recipe.name}
-              user={{name: 'Anna'}}
+              user={{name: recipe.submittedBy}}
             />
           </a>
         </Link>

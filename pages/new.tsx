@@ -1,5 +1,6 @@
 import React from 'react'
 import { v4 as uuid } from 'uuid'
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
 import { Form, Layout } from '../components'
 import { Recipe } from '../types'
@@ -18,6 +19,7 @@ const NewRecipe = () => {
     recipeYield: '',
     name: '',
   }
+  
   return (
     <Layout>
       <Form formId="add-recipe-form" recipeForm={recipeForm} />
@@ -25,4 +27,4 @@ const NewRecipe = () => {
   )
 }
 
-export default NewRecipe
+export default withPageAuthRequired(NewRecipe)

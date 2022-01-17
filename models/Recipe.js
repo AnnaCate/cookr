@@ -21,7 +21,6 @@ const NutritionSchema = new mongoose.Schema({
 })
 
 const RecipeSchema = new mongoose.Schema({
-  author: {},
   complimentaryRecipes: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Recipe',
@@ -46,6 +45,10 @@ const RecipeSchema = new mongoose.Schema({
     maxlength: [200, 'Title cannot be more than 200 characters'],
   },
   nutrition: NutritionSchema,
+  originalSource: String || {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Recipe',
+  },
   prepTime: String,
   recipeCategory: String,
   recipeCuisine: String,
@@ -53,10 +56,12 @@ const RecipeSchema = new mongoose.Schema({
   ingredients: [IngredientSchema],
   recipeInstructions: String,
   recipeYield: String,
-  similarRecipes: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Recipe',
-  },
+  similarRecipes: [
+    {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'Recipe',
+    },
+  ],
   submittedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
