@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
 
 const UserSchema = new mongoose.Schema({
-  _id: Schema.Types.ObjectId,
   avatar: String,
   email: {
     type: String,

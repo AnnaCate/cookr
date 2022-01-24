@@ -29,7 +29,7 @@ export function NavBar(props) {
               <a><FaRegPlusSquare className="h-8 w-8" /></a>
               </Link>)}
               {!user && (
-              <a href="/api/signup" className='mr-2 mb-2 bg-blue-500 text-white rounded-lg border cursor-pointer justify-center px-4 py-3 text-center'>
+              <a href="/api/auth/login" className='mr-2 mb-2 bg-blue-500 text-white rounded-lg border cursor-pointer justify-center px-4 py-3 text-center'>
                 <strong>Sign up</strong>
               </a>
               )}
