@@ -1,5 +1,6 @@
 import dbConnect from '../../../utils/dbConnect'
 import Recipe from '../../../models/Recipe'
+import User from '../../../models/User'
 
 export default async function handler(req, res) {
   const {

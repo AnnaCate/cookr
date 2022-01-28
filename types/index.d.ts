@@ -53,9 +53,7 @@ export interface Tile {
   difficulty?: string
   meal?: string
   title: string
-  user?: {
-    name: string
-  }
+  user?: User
 }
 
 interface User {

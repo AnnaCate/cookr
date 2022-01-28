@@ -6,12 +6,12 @@ const afterCallback = async (req, res, session, state) => {
   await dbConnect()
 
   try {
-    const auth0User = session.user
-    await User.create({
-      avatar: auth0User.picture,
-      email: auth0User.email,
-      name: auth0User.name,
-      sub: auth0User.sub,
+    const { user } = session
+    const result = await User.create({
+      avatar: user.picture,
+      email: user.email,
+      name: user.name,
+      sub: user.sub,
     })
   } catch (error) {
     console.log(error)

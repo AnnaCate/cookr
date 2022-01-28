@@ -1,14 +1,32 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import useSWR from 'swr'
-import { withPageAuthRequired, useUser } from '@auth0/nextjs-auth0'
+import useSWR, { mutate } from 'swr'
+import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { Form } from '../../components'
 
 function EditRecipe() {
   const router = useRouter()
   const { id } = router.query
 
-  const { user } = useUser()
+  const putData = async (form) => {
+    const { id } = router.query
+
+    try {
+      const res = await fetch(`/api/recipes/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) throw new Error(res.statusText)
+      const { data } = await res.json()
+      mutate(`/api/recipes/${id}`, data, false)
+      router.push('/')
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   const { data: recipe, error } = useSWR(
     id ? `/api/recipes/${id}` : null,
@@ -37,6 +55,7 @@ function EditRecipe() {
   return (
     <Form
       formId="edit-recipe-form"
+      onSubmit={putData}
       recipeForm={recipeForm}
       forNewRecipe={false}
     />
