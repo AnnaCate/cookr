@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
-import { mutate } from 'swr'
+
 import { FaRegPlusSquare, FaTimesCircle } from 'react-icons/fa'
 import { Input } from './input'
 import { Recipe, IngredientSection } from '../../types'
@@ -44,10 +44,12 @@ const IngredientsSubSection = ({
 
 export function Form({
   formId,
+  onSubmit,
   recipeForm,
   forNewRecipe = true,
 }: {
   formId: string
+  onSubmit: (form: any) => Promise<void>
   recipeForm: Recipe.Base | Recipe.Existing
   forNewRecipe?: boolean
 }) {
@@ -106,41 +108,6 @@ export function Form({
     setForm({ ...form, ingredients })
   }
 
-  const putData = async (form) => {
-    const { id } = router.query
-
-    try {
-      const res = await fetch(`/api/recipes/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(form),
-      })
-      if (!res.ok) throw new Error(res.statusText)
-      const { data } = await res.json()
-      mutate(`/api/recipes/${id}`, data, false)
-      router.push('/')
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const postData = async (form) => {
-    try {
-      const res = await fetch('/api/recipes', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(form),
-      })
-      if (!res.ok) throw new Error(res.statusText)
-
-      router.push('/')
-    } catch (error) {}
-  }
 
   const handleChange = (e) => {
     setForm({
@@ -153,7 +120,7 @@ export function Form({
     e.preventDefault()
     const errs = formValidate()
     if (Object.keys(errs).length === 0) {
-      forNewRecipe ? await postData(form) : await putData(form)
+      await onSubmit(form)
     } else {
       console.error(errs)
     }

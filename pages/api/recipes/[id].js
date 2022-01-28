@@ -1,5 +1,6 @@
 import dbConnect from '../../../utils/dbConnect'
 import Recipe from '../../../models/Recipe'
+import User from '../../../models/User'
 
 export default async function handler(req, res) {
   const {
@@ -12,7 +13,7 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET' /* Get a model by its ID */:
       try {
-        const recipe = await Recipe.findById(id)
+        const recipe = await Recipe.findById(id).populate('submittedBy')
         if (!recipe) {
           return res.status(400).json({ success: false })
         }

@@ -1,16 +1,33 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
+import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { Form } from '../../components'
 
-const fetcher = (url) =>
-  fetch(url)
-    .then((res) => res.json())
-    .then((json) => json.data)
-
-const EditRecipe = () => {
+function EditRecipe() {
   const router = useRouter()
   const { id } = router.query
+
+  const putData = async (form) => {
+    const { id } = router.query
+
+    try {
+      const res = await fetch(`/api/recipes/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) throw new Error(res.statusText)
+      const { data } = await res.json()
+      mutate(`/api/recipes/${id}`, data, false)
+      router.push('/')
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const { data: recipe, error } = useSWR(
     id ? `/api/recipes/${id}` : null,
     fetcher,
@@ -18,28 +35,36 @@ const EditRecipe = () => {
 
   if (error) return <p>Failed to load</p>
   if (!recipe) return <p>Loading...</p>
+  // if (recipe && recipe.submittedBy.sub !== user.sub) return <p>Unauthorized</p>
 
   const recipeForm = {
+    cookTime: recipe.cookTime,
     description: recipe.description,
     image: recipe.image,
-    keywords: recipe.keywords,
-    cookTime: recipe.cookTime,
-    prepTime: recipe.prepTime,
-    totalTime: recipe.totalTime,
-    recipeCategory: recipe.recipeCategory,
     ingredients: recipe.ingredients,
+    keywords: recipe.keywords,
+    name: recipe.name,
+    prepTime: recipe.prepTime,
+    recipeCategory: recipe.recipeCategory,
     recipeInstructions: recipe.recipeInstructions,
     recipeYield: recipe.recipeYield,
-    name: recipe.name,
+    submittedBy: recipe.submittedBy,
+    totalTime: recipe.totalTime,
   }
 
   return (
     <Form
       formId="edit-recipe-form"
+      onSubmit={putData}
       recipeForm={recipeForm}
       forNewRecipe={false}
     />
   )
 }
 
-export default EditRecipe
+const fetcher = (url) =>
+  fetch(url)
+    .then((res) => res.json())
+    .then((json) => json.data)
+
+export default withPageAuthRequired(EditRecipe)

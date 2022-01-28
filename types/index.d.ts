@@ -23,12 +23,12 @@ export namespace Recipe {
   interface Existing extends Base {
     _id: string
     datePublished: Date
-    submittedBy: string
+    submittedBy: User
   }
 }
 
 export interface IngredientSection {
-  id: number
+  id: string
   header: string
   ingredients: string
 }
@@ -53,7 +53,17 @@ export interface Tile {
   difficulty?: string
   meal?: string
   title: string
-  user?: {
-    name: string
-  }
+  user?: User
+}
+
+interface User {
+  _id: string
+  avatar: string
+  favorites: Recipe.Existing[]
+  name: string
+  email: string
+  recipes: Recipe.Existing[]
+  sub: string
+  wantToCook: Recipe.Existing[]
+  wouldNotCookAgain: Recipe.Existing[]
 }

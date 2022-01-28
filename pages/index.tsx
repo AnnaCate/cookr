@@ -16,7 +16,7 @@ const Index = ({ recipes }: {recipes: Recipe.Existing[]}) => (
               key={recipe._id}
               img={recipe.image}
               title={recipe.name}
-              user={{name: 'Anna'}}
+              user={recipe.submittedBy}
             />
           </a>
         </Link>
@@ -32,13 +32,17 @@ export async function getServerSideProps(): Promise<{
 }> {
   await dbConnect()
 
-  const result: any[] = await RecipeModel.find({})
+  const result: any[] = await RecipeModel.find({}).populate('submittedBy')
   const recipes = result.map((doc) => {
     const recipe = doc.toObject()
     return {
       ...recipe,
       _id: recipe._id.toString(),
       ingredients: recipe.ingredients.map(v => ({...v, _id: v._id.toString()})),
+      submittedBy: {
+        ...recipe.submittedBy,
+        _id: recipe.submittedBy._id.toString()
+      }
     }
   })
   return { props: { recipes } }
