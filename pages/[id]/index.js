@@ -96,7 +96,9 @@ export default function RecipeDetails({ recipe }) {
 export async function getServerSideProps({ params }) {
   await dbConnect()
 
-  const recipe = await Recipe.findById(params.id).populate('submittedBy').lean()
+  const recipe = await Recipe.findById(params.id)
+    .populate('submittedBy', 'name')
+    .lean()
 
   return {
     props: {

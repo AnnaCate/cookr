@@ -1,5 +1,6 @@
 import dbConnect from '../../../utils/dbConnect'
 import Recipe from '../../../models/Recipe'
+import User from '../../../models/User'
 
 export default async function handler(req, res) {
   const { method } = req
@@ -24,6 +25,15 @@ export default async function handler(req, res) {
           req.body,
         ) /* create a new model in the database */
         console.log('recipe', recipe)
+
+        // add recipe to user profile
+        const user = await User.findByIdAndUpdate(
+          recipe.submittedBy,
+          { $push: { recipes: recipe._id } },
+          { safe: true, upsert: true, new: true },
+        )
+        console.log('user.recipes', user.recipes)
+
         res.status(201).json({ success: true, data: recipe })
       } catch (error) {
         console.log(error)

@@ -32,7 +32,7 @@ export async function getServerSideProps(): Promise<{
 }> {
   await dbConnect()
 
-  const result: any[] = await RecipeModel.find({}).populate('submittedBy')
+  const result: any[] = await RecipeModel.find({}).populate('submittedBy', 'name').lean()
   const recipes = result.map((doc) => {
     const recipe = doc.toObject()
     return {
@@ -43,6 +43,7 @@ export async function getServerSideProps(): Promise<{
         ...recipe.submittedBy,
         _id: recipe.submittedBy._id.toString()
       }
+
     }
   })
   return { props: { recipes } }

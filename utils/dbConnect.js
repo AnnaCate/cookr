@@ -1,4 +1,6 @@
 import mongoose from 'mongoose'
+import Recipe from '../models/Recipe'
+import User from '../models/User'
 
 async function dbConnect() {
   // check if we have a connection to the database or if it's currently

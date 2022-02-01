@@ -4,7 +4,7 @@ import User from '../../../models/User'
 
 export default async function handler(req, res) {
   const {
-    query: { id },
+    query: { id: recipeId },
     method,
   } = req
 
@@ -13,7 +13,9 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET' /* Get a model by its ID */:
       try {
-        const recipe = await Recipe.findById(id).populate('submittedBy')
+        const recipe = await Recipe.findById(recipeId)
+          .populate('submittedBy')
+          .lean()
         if (!recipe) {
           return res.status(400).json({ success: false })
         }
@@ -25,7 +27,7 @@ export default async function handler(req, res) {
 
     case 'PUT' /* Edit a model by its ID */:
       try {
-        const recipe = await Recipe.findByIdAndUpdate(id, req.body, {
+        const recipe = await Recipe.findByIdAndUpdate(recipeId, req.body, {
           new: true,
           runValidators: true,
         })
@@ -40,10 +42,24 @@ export default async function handler(req, res) {
 
     case 'DELETE' /* Delete a model by its ID */:
       try {
-        const deletedRecipe = await Recipe.deleteOne({ _id: id })
-        if (!deletedRecipe) {
-          return res.status(400).json({ success: false })
-        }
+        await Recipe.findById(
+          recipeId,
+          'submittedBy',
+          async function (err, recipe) {
+            if (err) console.log(err)
+            await User.findByIdAndUpdate(
+              recipe.submittedBy,
+              { $pull: { recipes: recipeId } },
+              { new: true },
+              async function (err, user) {
+                if (err) throw new Error(err)
+                console.log('user', user)
+                const deletedRecipe = await Recipe.deleteOne({ _id: recipeId })
+                if (!deletedRecipe) throw new Error()
+              },
+            )
+          },
+        )
         res.status(200).json({ success: true, data: {} })
       } catch (error) {
         res.status(400).json({ success: false })
