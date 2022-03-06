@@ -1,4 +1,4 @@
-import { handleAuth, handleCallback } from '@auth0/nextjs-auth0'
+import { handleAuth, handleCallback, handleLogin } from '@auth0/nextjs-auth0'
 import dbConnect from '../../../utils/dbConnect'
 import User from '../../../models/User'
 
@@ -28,6 +28,13 @@ export default handleAuth({
       })
     } catch (error) {
       res.status(error.status || 400).end(error.message)
+    }
+  },
+  async login(req, res) {
+    try {
+      await handleLogin(req, res, { returnTo: `${process.env.AUTH0_BASE_URL}` })
+    } catch (error) {
+      res.status(error.status || 500).end(error.message)
     }
   },
 })
