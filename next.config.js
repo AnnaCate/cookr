@@ -1,4 +1,4 @@
-module.exports = async (phase, { defaultConfig }) => {
+module.exports = (phase, { defaultConfig }) => {
   /**
    * @type {import('next').NextConfig}
    */
