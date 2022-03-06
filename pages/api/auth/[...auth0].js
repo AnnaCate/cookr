@@ -22,7 +22,10 @@ const afterCallback = async (req, res, session, state) => {
 export default handleAuth({
   async callback(req, res) {
     try {
-      await handleCallback(req, res, { afterCallback })
+      await handleCallback(req, res, {
+        afterCallback,
+        redirectUri: `${process.env.AUTH0_BASE_URL}`,
+      })
     } catch (error) {
       res.status(error.status || 400).end(error.message)
     }
