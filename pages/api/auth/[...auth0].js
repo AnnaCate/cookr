@@ -3,24 +3,23 @@ import dbConnect from '../../../utils/dbConnect'
 import User from '../../../models/User'
 
 const afterCallback = async (req, res, session, state) => {
-  const { screen_hint = 'login' } = req.query
-  const { user } = session
+  const { user: auth0User } = session
 
   try {
     // connect to MongoDB
     await dbConnect()
     // see if user already exists in database
-    User.findOne({ sub: user.sub }, (err, user) => {
+    User.findOne({ sub: auth0User.sub }, (err, mongoUser) => {
       if (err) {
         console.log(err)
-      } else if (!user) {
+      } else if (!mongoUser) {
         // if not, create new user in database
         console.log('Creating new user')
         User.create({
-          avatar: user.picture,
-          email: user.email,
-          name: user.name,
-          sub: user.sub,
+          avatar: auth0User.picture,
+          email: auth0User.email,
+          name: auth0User.name,
+          sub: auth0User.sub,
         })
       } else {
         // else do nothing
