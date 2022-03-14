@@ -3,11 +3,12 @@ import dbConnect from '../../../utils/dbConnect'
 import User from '../../../models/User'
 
 const afterCallback = async (req, res, session, state) => {
-  await dbConnect()
+  const { user } = session
 
   try {
-    const { user } = session
-    const result = await User.create({
+    await dbConnect()
+
+    await User.create({
       avatar: user.picture,
       email: user.email,
       name: user.name,
@@ -22,7 +23,7 @@ const afterCallback = async (req, res, session, state) => {
 export default handleAuth({
   async callback(req, res) {
     try {
-      await handleCallback(req, res)
+      await handleCallback(req, res, { afterCallback })
     } catch (error) {
       res.status(error.status || 400).end(error.message)
     }
