@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSWR, { mutate } from 'swr'
-import { withPageAuthRequired } from '@auth0/nextjs-auth0'
+import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { Form } from '../../components'
 
 function EditRecipe() {
   const router = useRouter()
+
   const { id } = router.query
 
   const putData = async (form) => {
@@ -33,9 +34,16 @@ function EditRecipe() {
     fetcher,
   )
 
+  // ensure user is the owner of the recipe
+  const { user } = useUser()
+  const [userIsAuthorized, setUserIsAuthorized] = useState(false)
+  useEffect(() => {
+    if (user && recipe) setUserIsAuthorized(user.sub === recipe.submittedBy.sub)
+  }, [recipe, user])
+
   if (error) return <p>Failed to load</p>
-  if (!recipe) return <p>Loading...</p>
-  // if (recipe && recipe.submittedBy.sub !== user.sub) return <p>Unauthorized</p>
+  if (!recipe || !user) return <p>Loading...</p>
+  if (recipe && user && !userIsAuthorized) return <p>Unauthorized</p>
 
   const recipeForm = {
     cookTime: recipe.cookTime,

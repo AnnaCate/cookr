@@ -1,5 +1,4 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useUser } from '@auth0/nextjs-auth0'
@@ -13,6 +12,11 @@ export default function RecipeDetails({ recipe }) {
   const { user } = useUser()
 
   const [message, setMessage] = useState('')
+  const [userIsOwner, setUserIsOwner] = useState(false)
+
+  useEffect(() => {
+    if (user) setUserIsOwner(user.sub === recipe.submittedBy.sub)
+  }, [user])
 
   const handleDelete = async () => {
     const recipeID = router.query.id
@@ -50,7 +54,7 @@ export default function RecipeDetails({ recipe }) {
           <p className="whitespace-pre-wrap">{recipe.recipeInstructions}</p>
           <p className="c-input-label">Yield: {recipe.recipeYield}</p>
           <p className="c-input-label">Keywords: {recipe.keywords}</p>
-          {/* {user.sub === recipe.submittedBy.sub && (
+          {userIsOwner && (
             <div className="flex flex-row">
               <div className="mr-4 p-4">
                 <Link href="/[id]/edit" as={`/${recipe._id}/edit`}>
@@ -58,34 +62,22 @@ export default function RecipeDetails({ recipe }) {
                 </Link>
               </div>
               <div className="p-4">
-                <button type="button" onClick={handleDelete}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        'Are you sure you want to delete this recipe?',
+                      )
+                    )
+                      handleDelete()
+                  }}
+                >
                   Delete
                 </button>
               </div>
             </div>
-          )} */}
-          <div className="flex flex-row">
-            <div className="mr-4 p-4">
-              <Link href="/[id]/edit" as={`/${recipe._id}/edit`}>
-                <a>Edit</a>
-              </Link>
-            </div>
-            <div className="p-4">
-              <button
-                type="button"
-                onClick={() => {
-                  if (
-                    window.confirm(
-                      'Are you sure you want to delete this recipe?',
-                    )
-                  )
-                    handleDelete()
-                }}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
+          )}
         </div>
         {message && <p>{message}</p>}
       </div>
@@ -97,7 +89,7 @@ export async function getServerSideProps({ params }) {
   await dbConnect()
 
   const recipe = await Recipe.findById(params.id)
-    .populate('submittedBy', 'name')
+    .populate('submittedBy', ['name', 'sub'])
     .lean()
 
   return {
