@@ -29,7 +29,9 @@ export const IngredientsSubSection = ({
       placeholder="Marinade"
       value={state.ingredients[idx].header}
     />
-    <p className="text-sm text-gray-500 font-semibold">List of Ingredients:</p>
+    <p className="text-sm text-gray-500 font-semibold">
+      List of Ingredients:<span className="text-red-600 font-normal">*</span>
+    </p>
     {idx === 0 && (
       <p className="text-gray-500 italic text-sm">
         Write each ingredient on a new line.

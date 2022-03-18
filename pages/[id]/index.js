@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 import Link from 'next/link'
 import { useUser } from '@auth0/nextjs-auth0'
-
+import startCase from 'lodash/startCase'
 import dbConnect from '../../utils/dbConnect'
 import Recipe from '../../models/Recipe'
 import { Layout } from '../../components'
@@ -31,38 +32,59 @@ export default function RecipeDetails({ recipe }) {
       setMessage('Failed to delete the recipe.')
     }
   }
-  console.log(recipe)
+
   return (
-    <Layout>
-      <div key={recipe._id}>
-        <img src={recipe.image_url} />
-        <h1 className="my-3 text-3xl font-semibold text-gray-700 dark:text-gray-200">
-          {recipe.name}
-        </h1>
-        <div>
-          <p className="c-input-label">
-            Category: {JSON.stringify(recipe.recipeCategory)}
+    <>
+      <Head>
+        <title>{recipe.name}</title>
+        <meta property="og:description" content={recipe.description} />
+      </Head>
+      <Layout>
+        <div
+          key={recipe._id}
+          className="sm:bg-white sm:p-6 sm:rounded-xl sm:shadow-sm"
+        >
+          <p className="italic text-gray-400 text-sm mt-3 sm:mt-0 mb-3">
+            <a href="/">Recipes</a> &gt; {startCase(recipe.recipeCategory)}s
           </p>
-          <p className="c-input-label">Ingredients:</p>
-          {recipe.ingredients.map((ingr) => (
-            <div key={ingr._id}>
-              <p>{ingr.header}</p>
-              <p className="whitespace-pre-wrap">{ingr.ingredients}</p>
-            </div>
-          ))}
-          <p className="c-input-label">Instructions:</p>
-          <p className="whitespace-pre-wrap">{recipe.recipeInstructions}</p>
-          <p className="c-input-label">Yield: {recipe.recipeYield}</p>
-          <p className="c-input-label">Keywords: {recipe.keywords}</p>
-          {userIsOwner && (
-            <div className="flex flex-row">
-              <div className="mr-4 p-4">
-                <Link href="/[id]/edit" as={`/${recipe._id}/edit`}>
-                  <a>Edit</a>
-                </Link>
+          <h1 className="text-3xl font-semibold dark:text-gray-200 mb-1">
+            {recipe.name}
+          </h1>
+          <p className="text-gray-800 mb-2">
+            Submitted By: {recipe.submittedBy.name}
+          </p>
+          <img src={recipe.image_url} />
+          {recipe.description && (
+            <p className="italic text-gray-600 mb-3">
+              "{recipe.description.trim()}"
+            </p>
+          )}
+          <p className="c-input-label text-gray-900">
+            Yield: <span className="font-normal">{recipe.recipeYield}</span>
+          </p>
+          <hr className="my-4" />
+          <div>
+            <p className="c-input-label c-view">Ingredients:</p>
+            {recipe.ingredients.map((ingr) => (
+              <div className="mb-3" key={ingr._id}>
+                <p className="font-semibold">{ingr.header}</p>
+                <p className="whitespace-pre-wrap">{ingr.ingredients}</p>
               </div>
-              <div className="p-4">
+            ))}
+            <p className="c-input-label c-view mt-4">Instructions:</p>
+            <p className="whitespace-pre-wrap mb-4">
+              {recipe.recipeInstructions}
+            </p>
+            {userIsOwner && (
+              <div className="flex flex-row items-center my-6 sm:mb-0">
+                <Link href="/[id]/edit" as={`/${recipe._id}/edit`}>
+                  <a className="cursor-pointer text-center mr-6 py-4 px-6 text-white bg-gray-500 hover:bg-gray-600 rounded-xl focus:bg-gray-600">
+                    <span>Edit</span>
+                  </a>
+                </Link>
+
                 <button
+                  className="cursor-pointer text-center mr-4 p-4 w-20 text-white bg-red-300 hover:bg-red-500 rounded-xl focus:bg-red-500"
                   type="button"
                   onClick={() => {
                     if (
@@ -76,12 +98,12 @@ export default function RecipeDetails({ recipe }) {
                   Delete
                 </button>
               </div>
-            </div>
-          )}
+            )}
+          </div>
+          {message && <p>{message}</p>}
         </div>
-        {message && <p>{message}</p>}
-      </div>
-    </Layout>
+      </Layout>
+    </>
   )
 }
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSWR, { mutate } from 'swr'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
-import { Form } from '../../components'
+import { Form, Layout } from '../../components'
 
 function EditRecipe() {
   const router = useRouter()
@@ -61,12 +61,14 @@ function EditRecipe() {
   }
 
   return (
-    <Form
-      formId="edit-recipe-form"
-      onSubmit={putData}
-      recipeForm={recipeForm}
-      forNewRecipe={false}
-    />
+    <Layout>
+      <Form
+        formId="edit-recipe-form"
+        onSubmit={putData}
+        recipeForm={recipeForm}
+        forNewRecipe={false}
+      />
+    </Layout>
   )
 }
 

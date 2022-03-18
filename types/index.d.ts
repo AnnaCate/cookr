@@ -1,9 +1,9 @@
 export namespace Recipe {
-
   interface Base {
     author?: string
     complimentaryRecipes?: string[]
     cookTime?: string
+    difficulty?: 'easy' | 'intermediate' | 'hard'
     description: string
     image?: string
     keywords?: string[]
@@ -16,6 +16,7 @@ export namespace Recipe {
     recipeInstructions: string
     recipeYield?: string
     similarRecipes?: string[]
+    originalSource?: string
     suitableForDiet?: string[]
     totalTime?: string
   }
@@ -34,18 +35,18 @@ export interface IngredientSection {
 }
 
 interface Nutrition {
-  calories: string,
-  carbohydrateContent: string,
-  cholesterolContent: string,
-  fatContent: string,
-  fiberContent: string,
-  proteinContent: string,
-  saturatedFatContent: string,
-  servingSize: string,
-  sodiumContent: string,
-  sugarContent: string,
-  transFatContent: string,
-  unsaturatedFatContent: string,
+  calories: string
+  carbohydrateContent: string
+  cholesterolContent: string
+  fatContent: string
+  fiberContent: string
+  proteinContent: string
+  saturatedFatContent: string
+  servingSize: string
+  sodiumContent: string
+  sugarContent: string
+  transFatContent: string
+  unsaturatedFatContent: string
 }
 
 export interface Tile {

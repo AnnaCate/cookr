@@ -5,6 +5,7 @@ interface Props {
   id?: string
   label: string
   name: string
+  required?: boolean
   placeholder?: string
   type?: string
   value: string
@@ -16,6 +17,7 @@ export const Input = ({
   label,
   name,
   placeholder = '',
+  required = false,
   type = 'text',
   value,
 }: Props) => {
@@ -23,6 +25,7 @@ export const Input = ({
     <div className="c-input-wrapper">
       <label className="c-input-label" htmlFor={name}>
         {label}
+        {required && <span className="text-red-600 font-normal">*</span>}
       </label>
       <input
         className="c-input"

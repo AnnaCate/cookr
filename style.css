@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+p {
+  @apply opacity-90;
+}
+
 @layer components {
   /* FORM COMPONENTS */
   .c-input-wrapper {
@@ -14,5 +18,9 @@
 
   .c-input-label {
     @apply block mb-2 text-base text-gray-600 font-bold;
+  }
+
+  .c-input-label.c-view {
+    @apply block mb-2 text-lg text-gray-900 font-bold;
   }
 }
