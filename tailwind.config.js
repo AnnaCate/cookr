@@ -5,6 +5,10 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      fontFamily: {
+        sacramento: ['Sacramento', 'cursive'],
+        'source-sans-pro': ['Source Sans Pro', 'sans-serif'],
+      },
       maxWidth: {
         '1/3': '33.3333%',
       },

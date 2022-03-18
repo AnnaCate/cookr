@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
-import { Layout } from '../../components/layout'
 import { FaRegPlusSquare, FaTimesCircle } from 'react-icons/fa'
 import { Input } from './input'
 import { IngredientsSubSection } from './IngredientSubSection'
@@ -85,18 +84,8 @@ export function Form({
   }
 
   return (
-    <div className="sm:bg-white sm:p-6 sm:rounded-xl sm:shadow-sm">
-      <div className="text-center">
-        <h1 className="my-3 text-3xl font-semibold text-gray-700 dark:text-gray-200">
-          {`${forNewRecipe ? 'Add New' : 'Edit'} Recipe`}
-        </h1>
-        <p className="text-gray-400 dark:text-gray-400 mb-2">
-          {`${
-            forNewRecipe
-              ? 'Import or manually add a new recipe.'
-              : 'Make changes to an existing recipe.'
-          }`}
-        </p>
+    <div className="bg-white sm:p-6 sm:rounded-xl sm:shadow-sm">
+      <div className="text-left">
         <p className="text-gray-600 text-sm">
           <span className="text-red-600">*</span> Required
         </p>

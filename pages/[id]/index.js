@@ -14,7 +14,7 @@ export default function RecipeDetails({ recipe }) {
 
   const [message, setMessage] = useState('')
   const [userIsOwner, setUserIsOwner] = useState(false)
-
+  console.log(recipe.recipeInstructions)
   useEffect(() => {
     if (user) setUserIsOwner(user.sub === recipe.submittedBy.sub)
   }, [user])
@@ -40,13 +40,13 @@ export default function RecipeDetails({ recipe }) {
         <meta property="og:description" content={recipe.description} />
       </Head>
       <Layout>
+        <p className="italic text-gray-400 text-sm sm:-mt-4 mb-3 sm:ml-2">
+          <a href="/">Recipes</a> &gt; {startCase(recipe.recipeCategory)}s
+        </p>
         <div
           key={recipe._id}
           className="sm:bg-white sm:p-6 sm:rounded-xl sm:shadow-sm"
         >
-          <p className="italic text-gray-400 text-sm mt-3 sm:mt-0 mb-3">
-            <a href="/">Recipes</a> &gt; {startCase(recipe.recipeCategory)}s
-          </p>
           <h1 className="text-3xl font-semibold dark:text-gray-200 mb-1">
             {recipe.name}
           </h1>
@@ -72,7 +72,7 @@ export default function RecipeDetails({ recipe }) {
               </div>
             ))}
             <p className="c-input-label c-view mt-4">Instructions:</p>
-            <p className="whitespace-pre-wrap mb-4">
+            <p className="whitespace-pre-line mb-4">
               {recipe.recipeInstructions}
             </p>
             {userIsOwner && (
