@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useUser } from '@auth0/nextjs-auth0'
-import startCase from 'lodash/startCase'
+import { formatCategory } from '../../utils/format-category'
 import dbConnect from '../../utils/dbConnect'
 import Recipe from '../../models/Recipe'
 import { Layout } from '../../components'
@@ -32,7 +32,7 @@ export default function RecipeDetails({ recipe }) {
       setMessage('Failed to delete the recipe.')
     }
   }
-
+  console.log(recipe.recipeCategory)
   return (
     <>
       <Head>
@@ -41,7 +41,8 @@ export default function RecipeDetails({ recipe }) {
       </Head>
       <Layout>
         <p className="italic text-gray-400 text-sm sm:-mt-4 mb-3 sm:ml-2">
-          <a href="/">Recipes</a> &gt; {startCase(recipe.recipeCategory)}s
+          <a href="/">Recipes</a> &gt;{' '}
+          {formatCategory(recipe.recipeCategory).label}
         </p>
         <div
           key={recipe._id}
@@ -71,10 +72,14 @@ export default function RecipeDetails({ recipe }) {
                 <p className="whitespace-pre-wrap">{ingr.ingredients}</p>
               </div>
             ))}
-            <p className="c-input-label c-view mt-4">Instructions:</p>
-            <p className="whitespace-pre-line mb-4">
-              {recipe.recipeInstructions}
-            </p>
+            {recipe.recipeInstructions && (
+              <>
+                <p className="c-input-label c-view mt-4">Instructions:</p>
+                <p className="whitespace-pre-line mb-4">
+                  {recipe.recipeInstructions}
+                </p>
+              </>
+            )}
             {userIsOwner && (
               <div className="flex flex-row items-center my-6 sm:mb-0">
                 <Link href="/[id]/edit" as={`/${recipe._id}/edit`}>

@@ -5,9 +5,15 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      colors: {
+        transparent: 'transparent',
+      },
       fontFamily: {
         sacramento: ['Sacramento', 'cursive'],
         'source-sans-pro': ['Source Sans Pro', 'sans-serif'],
+      },
+      margin: {
+        6.5: '1.625rem',
       },
       maxWidth: {
         '1/3': '33.3333%',

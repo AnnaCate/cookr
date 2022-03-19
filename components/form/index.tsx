@@ -3,6 +3,8 @@ import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import { FaRegPlusSquare, FaTimesCircle } from 'react-icons/fa'
 import { Input } from './input'
+import { Dropdown } from '../'
+import { formatCategory } from '../../utils/format-category'
 import { IngredientsSubSection } from './IngredientSubSection'
 import { Recipe, IngredientSection } from '../../types'
 
@@ -33,6 +35,16 @@ export function Form({
     recipeInstructions: recipeForm.recipeInstructions,
     recipeYield: recipeForm.recipeYield,
   })
+
+  const handleCategorySelection = (category: {
+    value: string
+    label: string
+  }) => {
+    setForm({
+      ...form,
+      recipeCategory: category.value,
+    })
+  }
 
   const handleIngrChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -84,7 +96,7 @@ export function Form({
   }
 
   return (
-    <div className="bg-white sm:p-6 sm:rounded-xl sm:shadow-sm">
+    <div className="sm:bg-white sm:p-6 sm:rounded-xl sm:shadow-sm">
       <div className="text-left">
         <p className="text-gray-600 text-sm">
           <span className="text-red-600">*</span> Required
@@ -118,22 +130,47 @@ export function Form({
               <label className="c-input-label" htmlFor="categories">
                 Category<span className="text-red-600 font-normal">*</span>
               </label>
-              <div className="c-input-wrapper w-full">
-                <select
-                  className="c-input"
+              <div className="w-full">
+                <Dropdown
+                  id="recipeCategory"
                   name="recipeCategory"
-                  id="categories"
-                  onChange={handleChange}
-                >
-                  <option value="appetizer">Appetizer</option>
-                  <option value="beverage">Beverage</option>
-                  <option value="breakfast/brunch">Breakfast/Brunch</option>
-                  <option value="bread">Bread</option>
-                  <option value="main">Main</option>
-                  <option value="side">Side</option>
-                  <option value="snack">Snack</option>
-                  <option value="other">Other</option>
-                </select>
+                  onChange={handleCategorySelection}
+                  value={formatCategory(form.recipeCategory)}
+                  options={[
+                    {
+                      value: 'appetizer',
+                      label: 'Appetizer',
+                    },
+                    {
+                      value: 'beverage',
+                      label: 'Beverage',
+                    },
+                    {
+                      value: 'breakfast_brunch',
+                      label: 'Breakfast/Brunch',
+                    },
+                    {
+                      value: 'bread',
+                      label: 'Bread',
+                    },
+                    {
+                      value: 'main',
+                      label: 'Main',
+                    },
+                    {
+                      value: 'side',
+                      label: 'Side',
+                    },
+                    {
+                      value: 'snack',
+                      label: 'Snack',
+                    },
+                    {
+                      value: 'other',
+                      label: 'Other',
+                    },
+                  ]}
+                />
               </div>
             </div>
             <div className="w-full xs:w-1/2">
@@ -234,9 +271,9 @@ export function Form({
           <Input
             type="url"
             id="originalSource"
-            label="Source"
+            label="Source / Adapted From"
             name="originalSource"
-            value={form.image}
+            value={form.originalSource}
             placeholder="https://www.foodandwine.com/chimichurri-steak/"
             handleChange={handleChange}
           />

@@ -8,7 +8,7 @@ export function NavBar(props) {
 
   return (
     <nav
-      className="bg-white flex items-stretch flex-grow flex-shrink-0 shadow relative z-30 py-4 px-4 sm:px-8"
+      className="bg-white flex items-stretch flex-shrink-0 shadow relative z-30 py-4 px-4 sm:px-8"
       role="navigation"
       aria-label="main navigation"
     >
