@@ -18,6 +18,9 @@ module.exports = {
       maxWidth: {
         '1/3': '33.3333%',
       },
+      minHeight: {
+        48: '12rem',
+      },
     },
     screens: {
       xxs: '375px',

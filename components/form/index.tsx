@@ -154,6 +154,10 @@ export function Form({
                       label: 'Bread',
                     },
                     {
+                      value: 'dessert',
+                      label: 'Dessert',
+                    },
+                    {
                       value: 'main',
                       label: 'Main',
                     },

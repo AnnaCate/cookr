@@ -51,10 +51,31 @@ export default function RecipeDetails({ recipe }) {
           <h1 className="text-3xl font-semibold dark:text-gray-200 mb-1">
             {recipe.name}
           </h1>
-          <p className="text-gray-800 mb-2">
-            Submitted By: {recipe.submittedBy.name}
+          <p className="c-input-label text-gray-900 mb-2">
+            Submitted By:{' '}
+            <span className="font-normal">{recipe.submittedBy.name}</span>
           </p>
-          <img src={recipe.image_url} />
+          {recipe.originalSource && (
+            <p className="c-input-label text-gray-900 mb-2">
+              Original Source:{' '}
+              <a
+                className="font-normal hover:underline"
+                href={recipe.originalSource}
+                rel="noopener"
+                target="_blank"
+              >
+                {recipe.originalSource}
+              </a>
+            </p>
+          )}
+          {/* <figure className="sm:float-right sm:ml-8">
+            <img alt={`image of ${recipe.name}`} src={recipe.image} />
+            <figcaption className="text-gray-400 bg-gray-100 text-xs">
+              <a href={recipe.originalSource} rel="noopener" target="_blank">
+                {recipe.originalSource}
+              </a>
+            </figcaption>
+          </figure> */}
           {recipe.description && (
             <p className="italic text-gray-600 mb-3">
               "{recipe.description.trim()}"

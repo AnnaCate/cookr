@@ -11,12 +11,14 @@ const Index = ({ recipes }: { recipes: Recipe.Existing[] }) => (
     <div className="flex flex-row flex-wrap justify-center align-start w-full">
       {recipes.map((recipe: Recipe.Existing, idx: number) => (
         <Link key={recipe._id} href="/[id]" as={`/${recipe._id}`}>
-          <a>
+          <a className="z-0">
             <Tile
               key={recipe._id}
               img={recipe.image}
+              meal={recipe.recipeCategory}
               title={recipe.name}
               user={recipe.submittedBy}
+              originalSource={recipe.originalSource}
             />
           </a>
         </Link>
