@@ -53,6 +53,7 @@ export interface Tile {
   img: string
   difficulty?: string
   meal?: string
+  originalSource?: string
   title: string
   user?: User
 }
