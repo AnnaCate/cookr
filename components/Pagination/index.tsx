@@ -74,15 +74,15 @@ export function Pagination({
         </a>
       </div>
       <ul className="hidden md:-mt-px md:flex">
-        {[1, 2, 3].map((num) => (
+        {Array.from({ length: numPages }, (_, i) => i + 1).map((num) => (
           <PageNum num={num} />
         ))}
-        <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
+        {/* <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
           ...
-        </span>
-        {[8, 9, 10].map((num) => (
+        </span> */}
+        {/* {[8, 9, 10].map((num) => (
           <PageNum num={num} />
-        ))}
+        ))} */}
       </ul>
       <div
         className={`-mt-px w-0 flex-1 flex justify-end ${
