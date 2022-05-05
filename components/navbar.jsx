@@ -13,7 +13,12 @@ export function NavBar(props) {
       aria-label="main navigation"
     >
       <div className="flex justify-center items-center">
-        <Link href="/">
+        <Link
+          href={{
+            pathname: '/',
+            query: { page: '1' },
+          }}
+        >
           <a className="text-gray-700 no-underline">Home</a>
         </Link>
       </div>
@@ -31,14 +36,14 @@ export function NavBar(props) {
                 </a>
               </Link>
             )}
-            {!user && (
+            {/* {!user && (
               <a
                 href="/api/auth/login"
                 className="mr-2 bg-blue-500 font-semibold text-white rounded-lg border cursor-pointer justify-center px-4 py-3 text-center"
               >
                 Sign Up
               </a>
-            )}
+            )} */}
             {!user && (
               <a
                 className="bg-gray-200 text-gray-700 rounded-lg border cursor-pointer justify-center px-4 py-3 text-center"
