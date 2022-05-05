@@ -39,6 +39,12 @@ export default function Index({ totalNum }: { totalNum: number }) {
     appendQueryParam('page', currPage.toString())
   }, [])
 
+  React.useEffect(() => {
+    if (page !== currPage.toString()) {
+      setCurrPage(parsedPage)
+    }
+  }, [page])
+
   return (
     <Layout>
       <PageHeader title="cookr" subtitle="keep your recipes organized." />
