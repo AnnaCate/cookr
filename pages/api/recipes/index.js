@@ -14,6 +14,7 @@ export default async function handler(req, res) {
       try {
         const recipes = await Recipe.find({})
           .populate('submittedBy', 'name')
+          .sort('name')
           .skip(skipNum)
           .limit(8)
 

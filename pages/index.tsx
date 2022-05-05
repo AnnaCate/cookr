@@ -1,57 +1,73 @@
 import React from 'react'
 import { useRouter } from 'next/router'
+import useSWR, { mutate } from 'swr'
 
 import dbConnect from '../utils/dbConnect'
 import { default as RecipeModel } from '../models/Recipe'
 import { Layout, PageHeader, Pagination, Tile } from '../components'
 import { Recipe } from '../types'
 
+const fetcher = (url: string) =>
+  fetch(url, { method: 'GET' })
+    .then((res) => res.json())
+    .then((json) => json.data)
+
 export default function Index({ totalNum }: { totalNum: number }) {
   const router = useRouter()
+  const { query } = router
+  const { page = 1 } = query
+  const parsedPage = parseInt(page as string)
 
-  const [page, setPage] = React.useState(1)
-  const [renderedRecipes, setRenderedRecipes] = React.useState([])
+  const [currPage, setCurrPage] = React.useState(parsedPage)
 
-  const handlePaginate = async (page: number) => {
-    setPage(page)
+  const appendQueryParam = (key: string, value: string) => {
+    router.push({
+      pathname: router.pathname,
+      query: { [key]: encodeURI(value) },
+    })
+  }
+  const handlePaginate = async (newPage: number) => {
+    appendQueryParam('page', newPage.toString())
+    setCurrPage(newPage)
   }
 
+  const { data: renderedRecipes, error } = useSWR(
+    `/api/recipes?skip=${(currPage - 1) * 8}`,
+    fetcher,
+  )
   React.useEffect(() => {
-    const fetchRecipes = async () => {
-      const result = await fetch(`/api/recipes?skip=${(page - 1) * 8}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'GET',
-      })
-      const { data } = await result.json()
-      setRenderedRecipes(data)
-    }
-
-    fetchRecipes().catch(console.error)
-  }, [page])
+    appendQueryParam('page', currPage.toString())
+  }, [])
 
   return (
     <Layout>
       <PageHeader title="cookr" subtitle="keep your recipes organized." />
-      <div className="flex flex-row flex-wrap justify-center align-start w-full mb-4">
-        {renderedRecipes.map((recipe: Recipe.Existing) => (
-          <div
-            className="z-0 cursor-pointer"
-            onClick={() => router.push(`/${recipe._id}`)}
-          >
-            <Tile
-              key={recipe._id}
-              img={recipe.image}
-              meal={recipe.recipeCategory}
-              title={recipe.name}
-              user={recipe.submittedBy}
-              originalSource={recipe.originalSource}
-            />
+      <div className="flex flex-row flex-grow flex-wrap justify-center align-start w-full mb-4">
+        {!renderedRecipes && !error && <div>Loading...</div>}
+        {!renderedRecipes && error && (
+          <div>
+            Error loading recipes, please refresh the page to try again.
           </div>
-        ))}
+        )}
+        {renderedRecipes &&
+          renderedRecipes.map((recipe: Recipe.Existing) => (
+            <div
+              className="z-0 cursor-pointer"
+              key={recipe._id}
+              onClick={() => router.push(`/${recipe._id}`)}
+            >
+              <Tile
+                img={recipe.image}
+                meal={recipe.recipeCategory}
+                title={recipe.name}
+                user={recipe.submittedBy}
+                originalSource={recipe.originalSource}
+              />
+            </div>
+          ))}
       </div>
       <Pagination
+        currPage={currPage}
         handlePaginate={handlePaginate}
         numPages={Math.ceil(totalNum / 8)}
       />

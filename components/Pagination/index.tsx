@@ -3,14 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
 export function Pagination({
+  currPage,
   handlePaginate,
   numPages,
 }: {
+  currPage: number
   handlePaginate: (page: number) => void
   numPages: number
 }) {
-  const [currPage, setCurrPage] = React.useState(1)
-
   const PageNum = ({ num }: { num: number }) => {
     const isCurrent = num === currPage
 
@@ -24,7 +24,6 @@ export function Pagination({
       >
         <a
           onClick={() => {
-            setCurrPage(num)
             handlePaginate(num)
           }}
           aria-current={isCurrent}
@@ -39,12 +38,10 @@ export function Pagination({
   }
 
   const handlePrevious = () => {
-    setCurrPage(currPage - 1)
     handlePaginate(currPage - 1)
   }
 
   const handleNext = () => {
-    setCurrPage(currPage + 1)
     handlePaginate(currPage + 1)
   }
 
@@ -52,7 +49,7 @@ export function Pagination({
     <nav
       role="navigation"
       aria-label="Pagination Navigation"
-      className="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
+      className="border-t border-gray-200 px-4 flex flex-grow-0 items-center justify-between sm:px-0"
     >
       <div
         className={`-mt-px w-0 flex-1 flex ${
@@ -75,14 +72,11 @@ export function Pagination({
       </div>
       <ul className="hidden md:-mt-px md:flex">
         {Array.from({ length: numPages }, (_, i) => i + 1).map((num) => (
-          <PageNum num={num} />
+          <PageNum key={num} num={num} />
         ))}
         {/* <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
           ...
         </span> */}
-        {/* {[8, 9, 10].map((num) => (
-          <PageNum num={num} />
-        ))} */}
       </ul>
       <div
         className={`-mt-px w-0 flex-1 flex justify-end ${
