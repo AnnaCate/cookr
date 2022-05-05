@@ -16,7 +16,7 @@ import { Tile as TileProps } from '../types'
 export function Tile({ img, meal, title, user, originalSource }: TileProps) {
   const icon = getIconByCategory(meal)
   return (
-    <div className="flex flex-col h-64 w-64 m-2 rounded border bg-white shadow transform transition duration-300 xs:hover:shadow-md xs:hover:scale-105">
+    <div className="flex flex-col h-64 w-full xs:w-64 xs:m-2 xs:rounded xs:border bg-white xs:shadow transform transition duration-300 xs:hover:shadow-md xs:hover:scale-105">
       <div className="flex items-center justify-center grow overflow-hidden relative">
         <figure className="h-48 w-full">
           {img ? (
@@ -36,7 +36,7 @@ export function Tile({ img, meal, title, user, originalSource }: TileProps) {
           )}
           {img && originalSource && (
             <figcaption
-              className="absolute bottom-0 left-0 bg-gray-50 text-gray-400 text-xs whitespace-nowrap"
+              className="absolute bottom-0 left-0 bg-gray-50 text-gray-400 text-xs whitespace-nowrap w-full"
               title={originalSource}
             >
               <a
