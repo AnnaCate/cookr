@@ -13,14 +13,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { Tile as TileProps } from '../types'
 
-export function Tile({
-  img,
-  difficulty,
-  meal,
-  title,
-  user,
-  originalSource,
-}: TileProps) {
+export function Tile({ img, meal, title, user, originalSource }: TileProps) {
   const icon = getIconByCategory(meal)
   return (
     <div className="flex flex-col h-64 w-64 m-2 rounded border bg-white shadow transform transition duration-300 xs:hover:shadow-md xs:hover:scale-105">
@@ -41,7 +34,7 @@ export function Tile({
               />
             </div>
           )}
-          {originalSource && (
+          {img && originalSource && (
             <figcaption
               className="absolute bottom-0 left-0 bg-gray-50 text-gray-400 text-xs whitespace-nowrap"
               title={originalSource}

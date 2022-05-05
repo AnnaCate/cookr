@@ -3,18 +3,24 @@ import Recipe from '../../../models/Recipe'
 import User from '../../../models/User'
 
 export default async function handler(req, res) {
-  const { method } = req
+  const { method, query } = req
+  const { skip = 0 } = query
+  const skipNum = Number(skip)
 
   await dbConnect()
 
   switch (method) {
     case 'GET':
       try {
-        const recipes = await Recipe.find({}).populate(
-          'submittedBy',
-        ) /* find all the data in our database */
+        const recipes = await Recipe.find({})
+          .populate('submittedBy', 'name')
+          .sort('name')
+          .skip(skipNum)
+          .limit(8)
+
         res.status(200).json({ success: true, data: recipes })
       } catch (error) {
+        console.error(error)
         res.status(500).json({ success: false })
       }
       break
