@@ -48,18 +48,24 @@ export default function Index({ totalNum }: { totalNum: number }) {
   return (
     <Layout>
       <PageHeader title="cookr" subtitle="keep your recipes organized." />
-      <div className="mb-4">
-        {!renderedRecipes && !error && <div>Loading...</div>}
+      <div
+        className={`mb-4 ${!renderedRecipes && !error && 'mt-4 flex-grow '}`}
+      >
+        {!renderedRecipes && !error && (
+          <div className="mx-auto flex flex-col xs:flex-row flex-grow flex-wrap justify-start align-start xs:w-full">
+            Loading...
+          </div>
+        )}
         {!renderedRecipes && error && (
           <div>
             Error loading recipes, please refresh the page to try again.
           </div>
         )}
-        <div className="-mx-4 xs:mx-auto flex flex-col xs:flex-row flex-grow flex-wrap justify-center align-start xs:w-full">
+        <div className="mx-auto flex flex-col xs:flex-row flex-grow flex-wrap justify-center align-start xs:w-full">
           {renderedRecipes &&
             renderedRecipes.map((recipe: Recipe.Existing) => (
               <div
-                className="z-0 cursor-pointer"
+                className="z-0 cursor-pointer w-full xs:w-auto mb-4 xs:mb-0"
                 key={recipe._id}
                 onClick={() => router.push(`/${recipe._id}`)}
               >
