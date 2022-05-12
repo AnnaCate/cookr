@@ -1,8 +1,12 @@
 import dbConnect from '../../../utils/dbConnect'
 import Recipe from '../../../models/Recipe'
 import User from '../../../models/User'
+import { getSession } from '@auth0/nextjs-auth0'
 
 export default async function handler(req, res) {
+  const session = getSession(req, res)
+  const searchQuery = session ? {} : { originalSource: { $exists: false } }
+
   const { method, query } = req
   const { skip = 0 } = query
   const skipNum = Number(skip)
@@ -12,7 +16,7 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const recipes = await Recipe.find({})
+        const recipes = await Recipe.find(searchQuery)
           .populate('submittedBy', 'name')
           .sort('name')
           .skip(skipNum)
