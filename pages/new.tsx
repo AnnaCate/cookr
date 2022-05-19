@@ -12,10 +12,10 @@ import { getMongoUser } from '../utils/get-mongo.user'
 const NewRecipe = () => {
   const router = useRouter()
   const { user: auth0User } = useUser()
-  console.log('auth0User', auth0User)
+
   const recipeForm: Recipe.Base = {
     description: '',
-    image: '',
+    imageUrl: '',
     keywords: [],
     cookTime: '',
     prepTime: '',

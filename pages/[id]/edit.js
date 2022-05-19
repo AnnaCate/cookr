@@ -48,7 +48,7 @@ function EditRecipe() {
   const recipeForm = {
     cookTime: recipe.cookTime,
     description: recipe.description,
-    image: recipe.image,
+    imageUrl: recipe.imageUrl,
     ingredients: recipe.ingredients,
     keywords: recipe.keywords,
     name: recipe.name,

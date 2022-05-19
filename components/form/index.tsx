@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
-import { FaRegPlusSquare, FaTimesCircle } from 'react-icons/fa'
+import { FaRegImage, FaRegPlusSquare, FaTimesCircle } from 'react-icons/fa'
 import { Input } from './input'
 import { Dropdown } from '../'
 import { formatCategory } from '../../utils/format-category'
@@ -23,7 +23,8 @@ export function Form({
 
   const [form, setForm] = useState<Recipe.Base>({
     description: recipeForm.description,
-    image: recipeForm.image,
+    imageUrl: recipeForm.imageUrl,
+    uploadedImage: recipeForm.uploadedImage,
     keywords: recipeForm.keywords,
     name: recipeForm.name,
     cookTime: recipeForm.cookTime,
@@ -281,14 +282,31 @@ export function Form({
             placeholder="https://www.foodandwine.com/chimichurri-steak/"
             handleChange={handleChange}
           />
-          <Input
-            type="url"
-            id="image"
-            label="Image URL"
-            name="image"
-            value={form.image}
-            handleChange={handleChange}
-          />
+          <div className="mb-6">
+            <label className="c-input-label" htmlFor="keywords">
+              Image
+            </label>
+            <p className="text-gray-500 italic text-sm">
+              Paste the URL of the image you want to use for this recipe.
+            </p>
+            <Input
+              type="url"
+              id="image"
+              name="image"
+              placeholder="https://www.foodandwine.com/chimichurri-steak/image-200-620-px.jpg"
+              value={form.imageUrl}
+              handleChange={handleChange}
+            />
+            <p className="-mt-3 mb-2">OR</p>
+            <p className="text-gray-500 italic text-sm mb-1">
+              Click to upload your own image:
+            </p>
+            <button className="py-1 px-3 flex items-center justify-center text-white bg-gray-400 hover:bg-gray-500 rounded-md focus:bg-gray-500 focus:outline-none">
+              <>
+                <FaRegImage className="inline-block mr-2" /> Upload Image
+              </>
+            </button>
+          </div>
           <div className="mb-6">
             <label className="c-input-label" htmlFor="keywords">
               Keywords

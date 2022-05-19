@@ -32,6 +32,8 @@ const RecipeSchema = new mongoose.Schema({
   },
   description: String,
   image: String,
+  imageUrl: String,
+  uploadedImage: String,
   keywords: [
     {
       type: String,

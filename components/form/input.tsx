@@ -3,7 +3,7 @@ import React from 'react'
 interface Props {
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   id?: string
-  label: string
+  label?: string
   name: string
   required?: boolean
   placeholder?: string
@@ -23,10 +23,12 @@ export const Input = ({
 }: Props) => {
   return (
     <div className="c-input-wrapper">
-      <label className="c-input-label" htmlFor={name}>
-        {label}
-        {required && <span className="text-red-600 font-normal">*</span>}
-      </label>
+      {label && (
+        <label className="c-input-label" htmlFor={name}>
+          {label}
+          {required && <span className="text-red-600 font-normal">*</span>}
+        </label>
+      )}
       <input
         className="c-input"
         id={id}

@@ -5,7 +5,9 @@ export namespace Recipe {
     cookTime?: string
     difficulty?: 'easy' | 'intermediate' | 'hard'
     description: string
-    image?: string
+    image?: string // deprecated
+    imageUrl?: string
+    uploadedImage?: any
     keywords?: string[]
     name: string
     nutrition?: Nutrition
