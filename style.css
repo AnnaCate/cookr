@@ -39,4 +39,8 @@ p {
   .c-input-label.c-view {
     @apply block mb-2 text-lg text-gray-900 font-bold;
   }
+
+  .dropzone {
+    @apply py-1 px-3 flex items-center w-44 text-white bg-gray-400 hover:bg-gray-500 rounded-md focus:bg-gray-500 focus:outline-none cursor-pointer;
+  }
 }

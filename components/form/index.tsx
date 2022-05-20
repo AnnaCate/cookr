@@ -3,10 +3,11 @@ import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import { FaRegImage, FaRegPlusSquare, FaTimesCircle } from 'react-icons/fa'
 import { Input } from './input'
+import { Dropzone } from './Dropzone'
 import { Dropdown } from '../'
 import { formatCategory } from '../../utils/format-category'
 import { IngredientsSubSection } from './IngredientSubSection'
-import { Recipe, IngredientSection } from '../../types'
+import { Recipe, Image, IngredientSection } from '../../types'
 
 export function Form({
   formId,
@@ -37,6 +38,8 @@ export function Form({
     recipeYield: recipeForm.recipeYield,
   })
 
+  console.log('form', form)
+  const [userDidSubmit, setUserDidSubmit] = useState(false)
   const handleCategorySelection = (category: {
     value: string
     label: string
@@ -44,6 +47,17 @@ export function Form({
     setForm({
       ...form,
       recipeCategory: category.value,
+    })
+  }
+
+  const handleImageUpload = (image: Image) => {
+    const ts = new Date().getTime()
+    setForm({
+      ...form,
+      uploadedImage: {
+        id: `${uuid()}:${ts}`,
+        image,
+      },
     })
   }
 
@@ -80,6 +94,7 @@ export function Form({
     e.preventDefault()
     const errs = formValidate()
     if (Object.keys(errs).length === 0) {
+      setUserDidSubmit(true)
       await onSubmit(form)
     } else {
       console.error(errs)
@@ -301,11 +316,7 @@ export function Form({
             <p className="text-gray-500 italic text-sm mb-1">
               Click to upload your own image:
             </p>
-            <button className="py-1 px-3 flex items-center justify-center text-white bg-gray-400 hover:bg-gray-500 rounded-md focus:bg-gray-500 focus:outline-none">
-              <>
-                <FaRegImage className="inline-block mr-2" /> Upload Image
-              </>
-            </button>
+            <Dropzone setUploadedImage={handleImageUpload} />
           </div>
           <div className="mb-6">
             <label className="c-input-label" htmlFor="keywords">
@@ -325,9 +336,10 @@ export function Form({
           <div className="flex flex-col space-y-4 justify-center w-full items-center">
             <button
               type="submit"
-              className="w-full max-w-xs py-4 text-white bg-indigo-500 hover:bg-indigo-600 rounded-xl focus:bg-indigo-600 focus:outline-none"
+              disabled={userDidSubmit}
+              className="w-full max-w-xs py-4 text-white bg-indigo-500 hover:bg-indigo-600 rounded-xl focus:bg-indigo-600 focus:outline-none disabled:cursor-default disabled:bg-indigo-300"
             >
-              Submit
+              {!userDidSubmit ? `Submit` : `Submitting...`}
             </button>
             <button
               onClick={() => router.push('/')}

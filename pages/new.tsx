@@ -39,12 +39,15 @@ const NewRecipe = () => {
         },
         body: JSON.stringify({
           ...form,
+          uploadedImage: {
+            id: form.uploadededImage?.id || '',
+          },
           submittedBy: mongoUser.data._id,
         }),
       })
       if (!res.ok) throw new Error(res.statusText)
-
-      router.push('/')
+      const { data } = await res.json()
+      router.push(`/${data._id}`)
     } catch (error) {}
   }
 

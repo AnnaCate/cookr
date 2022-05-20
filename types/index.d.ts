@@ -1,3 +1,14 @@
+export interface Image {
+  path: string
+  preview: string
+  lastModified: number
+  lastModifiedDate: Date
+  name: string
+  size: number
+  type: string
+  webkitRelativePath: string
+}
+
 export namespace Recipe {
   interface Base {
     author?: string
@@ -7,7 +18,10 @@ export namespace Recipe {
     description: string
     image?: string // deprecated
     imageUrl?: string
-    uploadedImage?: any
+    uploadedImage?: {
+      id: string
+      image: Image
+    }
     keywords?: string[]
     name: string
     nutrition?: Nutrition
