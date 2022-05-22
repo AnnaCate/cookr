@@ -5,18 +5,32 @@ import { getSession } from '@auth0/nextjs-auth0'
 
 export default async function handler(req, res) {
   const session = getSession(req, res)
-  const searchQuery = session ? {} : { originalSource: { $exists: false } }
+  const authFilter = session ? {} : { originalSource: { $exists: false } }
 
   const { method, query } = req
-  const { skip = 0 } = query
+  const { search = '', skip = 0 } = query
   const skipNum = Number(skip)
 
+  const findQuery = search
+    ? {
+        $and: [
+          authFilter,
+          {
+            $or: [
+              { name: { $regex: search, $options: 'i' } },
+              { 'ingredients.ingredients': { $regex: search, $options: 'i' } },
+              { keywords: { $regex: search, $options: 'i' } },
+            ],
+          },
+        ],
+      }
+    : { ...authFilter }
   await dbConnect()
 
   switch (method) {
     case 'GET':
       try {
-        const recipes = await Recipe.find(searchQuery)
+        const recipes = await Recipe.find(findQuery)
           .populate('submittedBy', 'name')
           .sort('name')
           .skip(skipNum)
