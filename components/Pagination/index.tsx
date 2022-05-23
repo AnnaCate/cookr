@@ -1,6 +1,7 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { generatePageRange } from './utils'
 
 export function Pagination({
   currPage,
@@ -11,6 +12,17 @@ export function Pagination({
   handlePaginate: (page: number) => void
   numPages: number
 }) {
+  const [mobileRange, setMobileRange] = React.useState<number[]>([])
+  const [desktopRange, setDesktopRange] = React.useState<number[]>([])
+
+  React.useEffect(() => {
+    const desktopRange = generatePageRange(currPage, numPages)
+    setDesktopRange(desktopRange)
+
+    const mobileRange = generatePageRange(currPage, numPages, 1)
+    setMobileRange(mobileRange)
+  }, [currPage, numPages])
+
   const PageNum = ({ num }: { num: number }) => {
     const isCurrent = num === currPage
 
@@ -53,12 +65,15 @@ export function Pagination({
     >
       <div className="flex flex-col justify-center items-center sm:flex-row w-full">
         <ul className="flex -mt-px sm:hidden">
-          {Array.from({ length: numPages }, (_, i) => i + 1).map((num) => (
-            <PageNum key={num} num={num} />
-          ))}
-          {/* <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-          ...
-        </span> */}
+          {mobileRange.map((v) => {
+            return typeof v === 'number' ? (
+              <PageNum key={v} num={v} />
+            ) : (
+              <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
+                ...
+              </span>
+            )
+          })}
         </ul>
 
         <div className="flex flex-grow-0 items-center justify-between w-full">
@@ -82,12 +97,15 @@ export function Pagination({
             </a>
           </div>
           <ul className="hidden sm:-mt-px sm:flex">
-            {Array.from({ length: numPages }, (_, i) => i + 1).map((num) => (
-              <PageNum key={num} num={num} />
-            ))}
-            {/* <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
-          ...
-        </span> */}
+            {desktopRange.map((v) => {
+              return typeof v === 'number' ? (
+                <PageNum key={v} num={v} />
+              ) : (
+                <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
+                  ...
+                </span>
+              )
+            })}
           </ul>
           <div
             className={`-mt-px flex-1 flex justify-end ${
