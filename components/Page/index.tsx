@@ -12,18 +12,23 @@ const fetcher = (url: string) =>
 
 export const Page = ({
   currPage,
-  searchQuery,
+  opts = {},
 }: {
   currPage: number
-  searchQuery?: string
+  opts?: {
+    searchQuery?: string
+    userId?: string
+  }
 }) => {
   const router = useRouter()
-
+  const { searchQuery = '', userId = '' } = opts
   const { data: recipes, error } = useSWR(
-    `/api/recipes?skip=${(currPage - 1) * 8}&search=${searchQuery}`,
+    `/api/recipes?skip=${
+      (currPage - 1) * 8
+    }&search=${searchQuery}&userId=${userId}`,
     fetcher,
   )
-  console.log(recipes)
+
   return (
     <>
       {!recipes && !searchQuery && !error && (
