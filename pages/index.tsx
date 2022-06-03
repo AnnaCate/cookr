@@ -35,14 +35,18 @@ export default function Index({ totalNum }: { totalNum: number }) {
     }
   }, [page])
 
+  const opts = {
+    searchQuery,
+  }
+
   return (
     <Layout>
       <PageHeader title="cookr" subtitle="keep your recipes organized." />
       <div className={`mb-4 mt-4 flex-grow`}>
         <Search setSearchQuery={setSearchQuery} />
-        <Page currPage={currPage} searchQuery={searchQuery} />
+        <Page currPage={currPage} opts={opts} />
         <div style={{ display: 'none' }}>
-          <Page currPage={currPage + 1} />
+          <Page currPage={currPage + 1} opts={opts} />
         </div>
       </div>
       <Pagination

@@ -1,20 +1,21 @@
-import dbConnect from '../../../utils/dbConnect'
 import Recipe from '../../../models/Recipe'
 import User from '../../../models/User'
 import { getSession } from '@auth0/nextjs-auth0'
 
 export default async function handler(req, res) {
   const session = getSession(req, res)
-  const authFilter = session ? {} : { originalSource: { $exists: false } }
-
   const { method, query } = req
-  const { search = '', skip = 0 } = query
+  const { search = '', skip = 0, userId } = query
+  const authFilter = session ? {} : { originalSource: { $exists: false } }
+  const userFilter = userId ? { submittedBy: userId } : {}
+
   const skipNum = Number(skip)
 
   const findQuery = search
     ? {
         $and: [
           authFilter,
+          userFilter,
           {
             $or: [
               { name: { $regex: search, $options: 'i' } },
@@ -24,8 +25,7 @@ export default async function handler(req, res) {
           },
         ],
       }
-    : { ...authFilter }
-  await dbConnect()
+    : { ...authFilter, ...userFilter }
 
   switch (method) {
     case 'GET':
