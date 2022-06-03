@@ -31,6 +31,10 @@ export default function Me({ mongoUser }: { mongoUser: string | null }) {
   }, [])
 
   React.useEffect(() => {
+    handlePaginate(1)
+  }, [totalNum])
+
+  React.useEffect(() => {
     if (page !== currPage.toString()) {
       setCurrPage(parsedPage)
     }

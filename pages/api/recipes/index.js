@@ -1,8 +1,11 @@
+import dbConnect from '../../../utils/dbConnect'
 import Recipe from '../../../models/Recipe'
 import User from '../../../models/User'
 import { getSession } from '@auth0/nextjs-auth0'
 
 export default async function handler(req, res) {
+  await dbConnect()
+
   const session = getSession(req, res)
   const { method, query } = req
   const { search = '', skip = 0, userId } = query

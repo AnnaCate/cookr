@@ -1,7 +1,5 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import dbConnect from '../utils/dbConnect'
-import { default as RecipeModel } from '../models/Recipe'
 import { Layout, Page, PageHeader, Pagination, Search } from '../components'
 
 export default function Index() {
@@ -21,7 +19,7 @@ export default function Index() {
       query: { [key]: encodeURI(value) },
     })
   }
-  const handlePaginate = async (newPage: number) => {
+  const handlePaginate = (newPage: number) => {
     appendQueryParam('page', newPage.toString())
     setCurrPage(newPage)
   }
@@ -29,6 +27,10 @@ export default function Index() {
   React.useEffect(() => {
     appendQueryParam('page', currPage.toString())
   }, [])
+
+  React.useEffect(() => {
+    handlePaginate(1)
+  }, [totalNum])
 
   React.useEffect(() => {
     if (page !== currPage.toString()) {
