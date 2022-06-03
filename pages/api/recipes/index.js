@@ -14,8 +14,8 @@ export default async function handler(req, res) {
   const findQuery = search
     ? {
         $and: [
-          authFilter,
-          userFilter,
+          { ...authFilter },
+          { ...userFilter },
           {
             $or: [
               { name: { $regex: search, $options: 'i' } },
@@ -36,7 +36,8 @@ export default async function handler(req, res) {
           .skip(skipNum)
           .limit(8)
 
-        res.status(200).json({ success: true, data: recipes })
+        const totalNum = await Recipe.countDocuments(findQuery).exec()
+        res.status(200).json({ success: true, data: { recipes, totalNum } })
       } catch (error) {
         console.error(error)
         res.status(500).json({ success: false })

@@ -4,7 +4,7 @@ import dbConnect from '../utils/dbConnect'
 import { default as RecipeModel } from '../models/Recipe'
 import { Layout, Page, PageHeader, Pagination, Search } from '../components'
 
-export default function Index({ totalNum }: { totalNum: number }) {
+export default function Index() {
   const router = useRouter()
   const { query } = router
   const { page = 1 } = query
@@ -12,6 +12,7 @@ export default function Index({ totalNum }: { totalNum: number }) {
 
   const [currPage, setCurrPage] = React.useState(parsedPage)
   const [searchQuery, setSearchQuery] = React.useState('')
+  const [totalNum, setTotalNum] = React.useState(0)
 
   // Pagination
   const appendQueryParam = (key: string, value: string) => {
@@ -44,7 +45,7 @@ export default function Index({ totalNum }: { totalNum: number }) {
       <PageHeader title="cookr" subtitle="keep your recipes organized." />
       <div className={`mb-4 mt-4 flex-grow`}>
         <Search setSearchQuery={setSearchQuery} />
-        <Page currPage={currPage} opts={opts} />
+        <Page currPage={currPage} opts={opts} setTotalNum={setTotalNum} />
         <div style={{ display: 'none' }}>
           <Page currPage={currPage + 1} opts={opts} />
         </div>
@@ -56,15 +57,4 @@ export default function Index({ totalNum }: { totalNum: number }) {
       />
     </Layout>
   )
-}
-
-export async function getServerSideProps(): Promise<{
-  props: {
-    totalNum: number
-  }
-}> {
-  await dbConnect()
-
-  const totalNum = await RecipeModel.countDocuments().exec()
-  return { props: { totalNum } }
 }

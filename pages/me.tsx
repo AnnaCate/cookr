@@ -1,17 +1,10 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import dbConnect from '../utils/dbConnect'
 import { default as RecipeModel } from '../models/Recipe'
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { Layout, Page, PageHeader, Pagination, Search } from '../components'
 
-export default function Me({
-  mongoUser,
-  totalNum,
-}: {
-  mongoUser: string | null
-  totalNum: number
-}) {
+export default function Me({ mongoUser }: { mongoUser: string | null }) {
   const router = useRouter()
   const { query } = router
   const { page = 1 } = query
@@ -19,6 +12,7 @@ export default function Me({
 
   const [currPage, setCurrPage] = React.useState(parsedPage)
   const [searchQuery, setSearchQuery] = React.useState('')
+  const [totalNum, setTotalNum] = React.useState(0)
 
   // Pagination
   const appendQueryParam = (key: string, value: string) => {
@@ -55,7 +49,7 @@ export default function Me({
         <PageHeader title="My Recipes" />
         <div className={`mb-4 mt-4 flex-grow`}>
           <Search setSearchQuery={setSearchQuery} />
-          <Page currPage={currPage} opts={opts} />
+          <Page currPage={currPage} opts={opts} setTotalNum={setTotalNum} />
           <div style={{ display: 'none' }}>
             <Page currPage={currPage + 1} opts={opts} />
           </div>
@@ -75,17 +69,14 @@ export const getServerSideProps = withPageAuthRequired({
   async getServerSideProps(ctx) {
     const session = getSession(ctx.req, ctx.res)
     if (session) {
-      await dbConnect()
-      const totalNum = await RecipeModel.countDocuments().exec()
-
       const res = await fetch(
         `${process.env.VERCEL_URL}/api/users/${session.user.sub}`,
       )
       if (!res.ok) throw new Error(res.statusText)
       const { data: user } = await res.json()
 
-      return { props: { totalNum, mongoUser: user._id } }
+      return { props: { mongoUser: user._id } }
     }
-    return { props: { mongoUser: null, totalNum: 0 } }
+    return { props: { mongoUser: null } }
   },
 })
