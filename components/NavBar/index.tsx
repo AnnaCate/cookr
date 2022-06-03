@@ -2,9 +2,11 @@ import * as React from 'react'
 import Link from 'next/link'
 import { FaRegPlusSquare } from 'react-icons/fa'
 import { useUser } from '@auth0/nextjs-auth0'
+import { UserDropdown } from './UserMenu'
 
-export function NavBar(props) {
+export function NavBar() {
   const { user } = useUser()
+  const [userMenuOpen, setUserMenuOpen] = React.useState(false)
 
   return (
     <nav
@@ -53,12 +55,14 @@ export function NavBar(props) {
               </a>
             )}
             {user && (
-              <a
-                className="bg-gray-200 text-gray-700 rounded-lg border cursor-pointer justify-center px-4 py-3 text-center"
-                href="/api/auth/logout"
-              >
-                Log out
-              </a>
+              <div className="relative">
+                <img
+                  className="rounded-full h-10 w-10 cursor-pointer"
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  src={user.picture}
+                />
+                {userMenuOpen && <UserDropdown user={user} />}
+              </div>
             )}
           </div>
         </div>
