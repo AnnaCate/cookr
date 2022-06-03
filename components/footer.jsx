@@ -10,13 +10,12 @@ export function Footer() {
             ♥︎
           </span>{' '}
           by{' '}
-          <a
+          {/* <a
             href="http://www.github.com/annacate"
             target="_blank"
             rel="noopener noreferrer"
-          >
-            Anna Kemp
-          </a>
+          > */}
+          Anna K{/* </a> */}
         </p>
       </div>
     </footer>

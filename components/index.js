@@ -1,6 +1,6 @@
 export * from './form'
 export * from './layout'
-export * from './navbar'
+export * from './NavBar'
 export * from './footer'
 export * from './page-header'
 export * from './Pagination'
