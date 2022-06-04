@@ -76,9 +76,10 @@ export const getServerSideProps = withPageAuthRequired({
       const res = await fetch(
         `${process.env.VERCEL_URL}/api/users/${session.user.sub}`,
       )
-      if (!res.ok) throw new Error(res.statusText)
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
       const { data: user } = await res.json()
-
       return { props: { mongoUser: user._id } }
     }
     return { props: { mongoUser: null } }
