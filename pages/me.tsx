@@ -1,6 +1,5 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import { default as RecipeModel } from '../models/Recipe'
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { Layout, Page, PageHeader, Pagination, Search } from '../components'
 

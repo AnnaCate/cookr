@@ -4,7 +4,6 @@ import User from '../../../models/User'
 
 const afterCallback = async (req, res, session, state) => {
   const { user: auth0User } = session
-
   try {
     // connect to MongoDB
     await dbConnect()
@@ -42,7 +41,7 @@ export default handleAuth({
   },
   async login(req, res) {
     try {
-      await handleLogin(req, res)
+      await handleLogin(req, res, { returnTo: '/me' })
     } catch (error) {
       res.status(error.status || 500).end(error.message)
     }

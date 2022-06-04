@@ -5,13 +5,14 @@ import { UserProvider } from '@auth0/nextjs-auth0'
 import '../style.css'
 
 function MyApp({ Component, pageProps }) {
+  const { user } = pageProps
   return (
     <>
       <Head>
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <title>cookr</title>
       </Head>
-      <UserProvider>
+      <UserProvider user={user}>
         <Component {...pageProps} />
       </UserProvider>
     </>
