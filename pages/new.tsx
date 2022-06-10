@@ -12,7 +12,6 @@ import { getMongoUser } from '../utils/get-mongo.user'
 const NewRecipe = () => {
   const router = useRouter()
   const { user: auth0User } = useUser()
-  console.log('auth0User', auth0User)
   const recipeForm: Recipe.Base = {
     description: '',
     image: '',
@@ -27,9 +26,9 @@ const NewRecipe = () => {
     name: '',
   }
 
-  const postData = async (form) => {
+  const postData = async (form: Recipe.Base) => {
     try {
-      const mongoUser = await getMongoUser(auth0User.sub)
+      const mongoUser = await getMongoUser(auth0User?.sub)
 
       const res = await fetch('/api/recipes', {
         method: 'POST',
@@ -50,12 +49,14 @@ const NewRecipe = () => {
 
   return (
     <Layout>
-      <PageHeader title="submit a recipe" />
-      <Form
-        formId="add-recipe-form"
-        onSubmit={postData}
-        recipeForm={recipeForm}
-      />
+      <>
+        <PageHeader title="submit a recipe" />
+        <Form
+          formId="add-recipe-form"
+          onSubmit={postData}
+          recipeForm={recipeForm}
+        />
+      </>
     </Layout>
   )
 }

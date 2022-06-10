@@ -1,5 +1,6 @@
-export async function getMongoUser(sub) {
+export async function getMongoUser(sub: string | null | undefined) {
   try {
+    if (!sub) throw new Error('No user')
     const res = await fetch(`/api/users/${sub}`, {
       method: 'GET',
       headers: {

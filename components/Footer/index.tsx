@@ -9,13 +9,7 @@ export function Footer() {
           <span role="img" aria-label="heart emoji">
             ♥︎
           </span>{' '}
-          by{' '}
-          {/* <a
-            href="http://www.github.com/annacate"
-            target="_blank"
-            rel="noopener noreferrer"
-          > */}
-          Anna K{/* </a> */}
+          by Anna K
         </p>
       </div>
     </footer>

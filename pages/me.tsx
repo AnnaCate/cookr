@@ -49,19 +49,21 @@ export default function Me({ mongoUser }: { mongoUser: string | null }) {
   return (
     mongoUser && (
       <Layout>
-        <PageHeader title="My Recipes" />
-        <div className={`mb-4 mt-4 flex-grow`}>
-          <Search setSearchQuery={setSearchQuery} />
-          <Page currPage={currPage} opts={opts} setTotalNum={setTotalNum} />
-          <div style={{ display: 'none' }}>
-            <Page currPage={currPage + 1} opts={opts} />
+        <>
+          <PageHeader title="My Recipes" />
+          <div className={`mb-4 mt-4 flex-grow`}>
+            <Search setSearchQuery={setSearchQuery} />
+            <Page currPage={currPage} opts={opts} setTotalNum={setTotalNum} />
+            <div style={{ display: 'none' }}>
+              <Page currPage={currPage + 1} opts={opts} />
+            </div>
           </div>
-        </div>
-        <Pagination
-          currPage={currPage}
-          handlePaginate={handlePaginate}
-          numPages={Math.ceil(totalNum / 8)}
-        />
+          <Pagination
+            currPage={currPage}
+            handlePaginate={handlePaginate}
+            numPages={Math.ceil(totalNum / 8)}
+          />
+        </>
       </Layout>
     )
   )

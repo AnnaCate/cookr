@@ -19,7 +19,7 @@ export const Page = ({
   setTotalNum?: React.Dispatch<React.SetStateAction<number>>
   opts?: {
     searchQuery?: string
-    userId?: string
+    userId?: string | null
   }
 }) => {
   const router = useRouter()

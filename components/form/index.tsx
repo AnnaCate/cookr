@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
-import { FaRegPlusSquare, FaTimesCircle } from 'react-icons/fa'
-import { Input } from './input'
-import { Dropdown } from '../'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleXmark, faSquarePlus } from '@fortawesome/free-solid-svg-icons'
+import { Input } from './Input'
+import { Dropdown } from '..'
 import { formatCategory } from '../../utils/format-category'
 import { IngredientsSubSection } from './IngredientSubSection'
-import { Recipe, IngredientSection } from '../../types'
+import { Recipe } from '../../types'
 
 export function Form({
   formId,
@@ -37,12 +38,12 @@ export function Form({
   })
 
   const handleCategorySelection = (category: {
-    value: string
+    value: string | number
     label: string
   }) => {
     setForm({
       ...form,
-      recipeCategory: category.value,
+      recipeCategory: String(category.value),
     })
   }
 
@@ -52,12 +53,13 @@ export function Form({
   ): void => {
     const ingredients = [...form.ingredients]
     const newIngrSection = { ...ingredients[idx] }
+    // @ts-ignore
     newIngrSection[e.target.name] = e.target.value
     ingredients[idx] = newIngrSection
     setForm({ ...form, ingredients })
   }
 
-  const handleRemoveIngrSection = (x: IngredientSection) => {
+  const handleRemoveIngrSection = (x: Recipe.IngredientSection) => {
     const ingredients = form.ingredients.filter(
       (ingredient) => ingredient.id !== x.id,
     )
@@ -183,7 +185,7 @@ export function Form({
                 label="Yield"
                 name="recipeYield"
                 placeholder="6 servings"
-                value={form.recipeYield}
+                value={form.recipeYield || ''}
               />
             </div>
           </div>
@@ -194,7 +196,7 @@ export function Form({
                 label="Active Time"
                 name="prepTime"
                 placeholder="20 min"
-                value={form.prepTime}
+                value={form.prepTime || ''}
               />
             </div>
             <div className="xs:pr-4 w-full xs:w-1/3">
@@ -203,7 +205,7 @@ export function Form({
                 label="Cook Time"
                 name="cookTime"
                 placeholder="10 min"
-                value={form.cookTime}
+                value={form.cookTime || ''}
               />
             </div>
             <div className="w-full xs:w-1/3">
@@ -212,7 +214,7 @@ export function Form({
                 label="Total Time"
                 name="totalTime"
                 placeholder="30 min"
-                value={form.totalTime}
+                value={form.totalTime || ''}
               />
             </div>
           </div>
@@ -227,15 +229,19 @@ export function Form({
                   state={form}
                   handleChange={(e) => handleIngrChange(e, idx)}
                 />
-                {arr.length > 1 && (
+                {arr.length > 1 && idx > 0 && (
                   <button
+                    title="Remove sub-section"
                     type="button"
                     className="hidden group-hover:inline absolute -top-1 -right-1 text-red-400 bg-white"
                     onClick={() => {
                       handleRemoveIngrSection(ingredient)
                     }}
                   >
-                    <FaTimesCircle />
+                    <FontAwesomeIcon
+                      icon={faCircleXmark}
+                      className="h-4 w-4 mt-4"
+                    />
                   </button>
                 )}
               </div>
@@ -254,7 +260,10 @@ export function Form({
               type="button"
             >
               <>
-                <FaRegPlusSquare className="inline-block mr-2" />
+                <FontAwesomeIcon
+                  className="inline-block mr-2 h-7 w-7"
+                  icon={faSquarePlus}
+                />
                 Add ingredients sub-section
               </>
             </button>
@@ -277,7 +286,7 @@ export function Form({
             id="originalSource"
             label="Source / Adapted From"
             name="originalSource"
-            value={form.originalSource}
+            value={form.originalSource || ''}
             placeholder="https://www.foodandwine.com/chimichurri-steak/"
             handleChange={handleChange}
           />
@@ -286,7 +295,7 @@ export function Form({
             id="image"
             label="Image URL"
             name="image"
-            value={form.image}
+            value={form.image || ''}
             handleChange={handleChange}
           />
           <div className="mb-6">

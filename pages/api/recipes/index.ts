@@ -1,9 +1,13 @@
+import { NextApiRequest, NextApiResponse } from 'next'
 import dbConnect from '../../../utils/dbConnect'
 import Recipe from '../../../models/Recipe'
 import User from '../../../models/User'
 import { getSession } from '@auth0/nextjs-auth0'
 
-export default async function handler(req, res) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   await dbConnect()
 
   const session = getSession(req, res)
@@ -48,19 +52,16 @@ export default async function handler(req, res) {
       break
     case 'POST':
       try {
-        console.log(req.body)
         const recipe = await Recipe.create(
           req.body,
         ) /* create a new model in the database */
-        console.log('recipe', recipe)
 
         // add recipe to user profile
-        const user = await User.findByIdAndUpdate(
+        await User.findByIdAndUpdate(
           recipe.submittedBy,
           { $push: { recipes: recipe._id } },
-          { safe: true, upsert: true, new: true },
+          { upsert: true, new: true },
         )
-        console.log('user.recipes', user.recipes)
 
         res.status(201).json({ success: true, data: recipe })
       } catch (error) {
