@@ -1,6 +1,7 @@
 import * as React from 'react'
 import Link from 'next/link'
-import { FaRegPlusSquare } from 'react-icons/fa'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSquarePlus } from '@fortawesome/free-solid-svg-icons'
 import { useUser } from '@auth0/nextjs-auth0'
 import { UserDropdown } from './UserMenu'
 
@@ -31,9 +32,10 @@ export function NavBar() {
             {user && (
               <Link href="/new">
                 <a>
-                  <FaRegPlusSquare
-                    title="Add new recipe"
+                  <FontAwesomeIcon
                     className="h-8 w-8 mr-4"
+                    icon={faSquarePlus}
+                    title="Add new recipe"
                   />
                 </a>
               </Link>
@@ -56,11 +58,13 @@ export function NavBar() {
             )}
             {user && (
               <div className="relative">
-                <img
-                  className="rounded-full h-10 w-10 cursor-pointer"
-                  onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  src={user.picture}
-                />
+                {user.picture && (
+                  <img
+                    className="rounded-full h-10 w-10 cursor-pointer"
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                    src={user.picture}
+                  />
+                )}
                 {userMenuOpen && <UserDropdown user={user} />}
               </div>
             )}

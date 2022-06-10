@@ -12,15 +12,17 @@ export function Pagination({
   handlePaginate: (page: number) => void
   numPages: number
 }) {
-  const [mobileRange, setMobileRange] = React.useState<number[]>([])
-  const [desktopRange, setDesktopRange] = React.useState<number[]>([])
+  const [mobileRange, setMobileRange] = React.useState<(string | number)[]>([])
+  const [desktopRange, setDesktopRange] = React.useState<(string | number)[]>(
+    [],
+  )
 
   React.useEffect(() => {
-    const desktopRange = generatePageRange(currPage, numPages)
-    setDesktopRange(desktopRange)
+    const dRange = generatePageRange(currPage, numPages)
+    setDesktopRange(dRange)
 
-    const mobileRange = generatePageRange(currPage, numPages, 1)
-    setMobileRange(mobileRange)
+    const mRange = generatePageRange(currPage, numPages, 1)
+    setMobileRange(mRange)
   }, [currPage, numPages])
 
   const PageNum = ({ num }: { num: number }) => {

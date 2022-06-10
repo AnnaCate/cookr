@@ -3,13 +3,14 @@ import { useRouter } from 'next/router'
 import useSWR, { mutate } from 'swr'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { Form, Layout, PageHeader } from '../../components'
+import { Recipe } from '../../types'
 
 function EditRecipe() {
   const router = useRouter()
 
   const { id } = router.query
 
-  const putData = async (form) => {
+  const putData = async (form: Recipe.Existing) => {
     const { id } = router.query
 
     try {
@@ -62,20 +63,22 @@ function EditRecipe() {
 
   return (
     <Layout>
-      <div className="mb-8">
-        <PageHeader title="edit a recipe" />
-      </div>
-      <Form
-        formId="edit-recipe-form"
-        onSubmit={putData}
-        recipeForm={recipeForm}
-        forNewRecipe={false}
-      />
+      <>
+        <div className="mb-8">
+          <PageHeader title="edit a recipe" />
+        </div>
+        <Form
+          formId="edit-recipe-form"
+          onSubmit={putData}
+          recipeForm={recipeForm}
+          forNewRecipe={false}
+        />
+      </>
     </Layout>
   )
 }
 
-const fetcher = (url) =>
+const fetcher = (url: string) =>
   fetch(url)
     .then((res) => res.json())
     .then((json) => json.data)

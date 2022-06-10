@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { Footer, NavBar } from './'
+import { Footer, NavBar } from '..'
 
-export function Layout(props) {
+export function Layout(props: { children: React.ReactChild }) {
   return (
     <div
       id="site"

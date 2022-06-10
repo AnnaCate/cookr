@@ -26,36 +26,37 @@ export namespace Recipe {
     datePublished: Date
     submittedBy: User
   }
-}
 
-export interface IngredientSection {
-  id: string
-  header: string
-  ingredients: string
-}
+  interface IngredientSection {
+    _id?: string
+    id: string
+    header: string
+    ingredients: string
+  }
 
-interface Nutrition {
-  calories: string
-  carbohydrateContent: string
-  cholesterolContent: string
-  fatContent: string
-  fiberContent: string
-  proteinContent: string
-  saturatedFatContent: string
-  servingSize: string
-  sodiumContent: string
-  sugarContent: string
-  transFatContent: string
-  unsaturatedFatContent: string
+  interface Nutrition {
+    calories: string
+    carbohydrateContent: string
+    cholesterolContent: string
+    fatContent: string
+    fiberContent: string
+    proteinContent: string
+    saturatedFatContent: string
+    servingSize: string
+    sodiumContent: string
+    sugarContent: string
+    transFatContent: string
+    unsaturatedFatContent: string
+  }
 }
 
 export interface Tile {
-  img: string
+  img: string | undefined
   difficulty?: string
-  meal?: string
+  meal: string
   originalSource?: string
   title: string
-  user?: User
+  user: User
 }
 
 interface User {

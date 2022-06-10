@@ -1,8 +1,12 @@
+import { NextApiRequest, NextApiResponse } from 'next'
 import dbConnect from '../../../utils/dbConnect'
 import Recipe from '../../../models/Recipe'
 import User from '../../../models/User'
 
-export default async function handler(req, res) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   const {
     query: { id: recipeId },
     method,
@@ -45,13 +49,14 @@ export default async function handler(req, res) {
         await Recipe.findById(
           recipeId,
           'submittedBy',
-          async function (err, recipe) {
+          null,
+          async function (err: any, recipe: any) {
             if (err) console.log(err)
             await User.findByIdAndUpdate(
               recipe.submittedBy,
               { $pull: { recipes: recipeId } },
               { new: true },
-              async function (err, user) {
+              async function (err: any, user: any) {
                 if (err) throw new Error(err)
                 console.log('user', user)
                 const deletedRecipe = await Recipe.deleteOne({ _id: recipeId })

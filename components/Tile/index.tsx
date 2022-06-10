@@ -11,7 +11,7 @@ import {
   faAppleWhole,
   faJar,
 } from '@fortawesome/free-solid-svg-icons'
-import { Tile as TileProps } from '../types'
+import { Tile as TileProps } from '../../types'
 
 export function Tile({ img, meal, title, user, originalSource }: TileProps) {
   const icon = getIconByCategory(meal)

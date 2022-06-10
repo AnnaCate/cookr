@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { ClickawayListener, ErrorMessage } from '.'
+import { ClickawayListener, ErrorMessage } from '..'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
 
 export interface DropdownOption {
-  label?: string
+  label: string
   value: string | number
 }
 
