@@ -41,7 +41,7 @@ export default handleAuth({
   },
   async login(req, res) {
     try {
-      await handleLogin(req, res, { returnTo: '/me' })
+      await handleLogin(req, res, { returnTo: '/' })
     } catch (error) {
       res.status(error.status || 500).end(error.message)
     }
