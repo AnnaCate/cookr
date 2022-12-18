@@ -16,7 +16,6 @@ export default function Login() {
 		})
 
 		if (res.status === 200) {
-			setValid(true)
 			router.push('/')
 		} else setValid(false)
 	}
