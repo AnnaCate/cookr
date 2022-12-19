@@ -10,14 +10,14 @@ export default function Login() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 
-		// const res = await fetch('/api/auth/password', {
-		// 	method: 'POST',
-		// 	body: JSON.stringify({ password: value }),
-		// })
-		router.push('/').then(() => router.reload())
-	// 	if (res.status === 200) {
-	// 		router.push('/')
-	// 	} else setValid(false)
+		const res = await fetch('/api/auth/password', {
+			method: 'POST',
+			body: JSON.stringify({ password: value }),
+		})
+
+		if (res.status === 200) {
+			router.push('/').then(() => router.reload())
+		} else setValid(false)
 	}
 
 	return (
