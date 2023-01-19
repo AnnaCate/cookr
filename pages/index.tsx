@@ -29,8 +29,8 @@ export default function Index() {
   }, [])
 
   React.useEffect(() => {
-    handlePaginate(1)
-  }, [totalNum])
+    if (searchQuery) handlePaginate(1)
+  }, [searchQuery])
 
   React.useEffect(() => {
     if (page !== currPage.toString()) {

@@ -58,14 +58,11 @@ export default function RecipeDetails({ recipe }) {
           {recipe.originalSource && (
             <p className="c-input-label text-gray-900 mb-2">
               Original Source:{' '}
-              <a
-                className="font-normal hover:underline"
-                href={recipe.originalSource}
-                rel="noopener"
-                target="_blank"
+              <span
+                className="font-normal"
               >
                 {recipe.originalSource}
-              </a>
+              </span>
             </p>
           )}
           {/* <figure className="sm:float-right sm:ml-8">
