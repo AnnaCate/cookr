@@ -6,23 +6,52 @@ export default async function handler(req, res) {
   await dbConnect()
 
   const { method, query } = req
-  const { search = '', skip = 0, userId } = query
+  const { recipeCategory = '', search = '', skip = 0, userId } = query
   const userFilter = userId ? { submittedBy: userId } : {}
 
   const skipNum = Number(skip)
 
+  const recipeCategories = recipeCategory.split(',').map((category) => ({
+    recipeCategory: category,
+  }))
+
+  /**
+   * @todo clean this up, it's a mess and doesn't scale
+   */
   const findQuery = search
+    ? recipeCategory
+      ? {
+          $and: [
+            { ...userFilter },
+            {
+              $or: [
+                { name: { $regex: search, $options: 'i' } },
+                {
+                  'ingredients.ingredients': { $regex: search, $options: 'i' },
+                },
+                { keywords: { $regex: search, $options: 'i' } },
+              ],
+            },
+            { $or: recipeCategories },
+          ],
+        }
+      : {
+          $and: [
+            { ...userFilter },
+            {
+              $or: [
+                { name: { $regex: search, $options: 'i' } },
+                {
+                  'ingredients.ingredients': { $regex: search, $options: 'i' },
+                },
+                { keywords: { $regex: search, $options: 'i' } },
+              ],
+            },
+          ],
+        }
+    : recipeCategory
     ? {
-        $and: [
-          { ...userFilter },
-          {
-            $or: [
-              { name: { $regex: search, $options: 'i' } },
-              { 'ingredients.ingredients': { $regex: search, $options: 'i' } },
-              { keywords: { $regex: search, $options: 'i' } },
-            ],
-          },
-        ],
+        $and: [{ ...userFilter }, { $or: recipeCategories }],
       }
     : { ...userFilter }
 
