@@ -52,6 +52,7 @@ function EditRecipe() {
     ingredients: recipe.ingredients,
     keywords: recipe.keywords,
     name: recipe.name,
+    originalSource: recipe.originalSource,
     prepTime: recipe.prepTime,
     recipeCategory: recipe.recipeCategory,
     recipeInstructions: recipe.recipeInstructions,
