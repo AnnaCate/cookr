@@ -18,16 +18,29 @@ export const Page = ({
   currPage: number
   setTotalNum?: React.Dispatch<React.SetStateAction<number>>
   opts?: {
+    filter?: {
+      type: 'recipeCategory' | 'keywords'
+      filter: {
+        label: string
+        value: string
+      }
+    }[]
     searchQuery?: string
     userId?: string
   }
 }) => {
   const router = useRouter()
-  const { searchQuery = '', userId = '' } = opts
+  const { filter = [], searchQuery = '', userId = '' } = opts
+
+  const recipeCategoryFilters = filter
+    .filter((v) => v.type === 'recipeCategory')
+    .map((v) => v.filter.value)
+    .join(',')
+
   const { data, error } = useSWR(
     `/api/recipes?skip=${
       (currPage - 1) * 8
-    }&search=${searchQuery}&userId=${userId}`,
+    }&search=${searchQuery}&userId=${userId}&recipeCategory=${recipeCategoryFilters}`,
     fetcher,
   )
 

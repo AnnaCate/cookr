@@ -1,6 +1,13 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import { Layout, Page, PageHeader, Pagination, Search } from '../components'
+import {
+  Filter,
+  Layout,
+  Page,
+  PageHeader,
+  Pagination,
+  Search,
+} from '../components'
 
 export default function Index() {
   const router = useRouter()
@@ -10,6 +17,12 @@ export default function Index() {
 
   const [currPage, setCurrPage] = React.useState(parsedPage)
   const [searchQuery, setSearchQuery] = React.useState('')
+  const [filter, setFilter] = React.useState<
+    {
+      type: 'recipeCategory' | 'keywords'
+      filter: { label: string; value: string }
+    }[]
+  >([])
   const [totalNum, setTotalNum] = React.useState(0)
 
   // Pagination
@@ -40,6 +53,7 @@ export default function Index() {
 
   const opts = {
     searchQuery,
+    filter,
   }
 
   return (
@@ -47,6 +61,9 @@ export default function Index() {
       <PageHeader title="cookr" subtitle="keep your recipes organized." />
       <div className={`mb-4 mt-4 flex-grow`}>
         <Search setSearchQuery={setSearchQuery} />
+        <div className="my-4">
+          <Filter filter={filter} setFilter={setFilter} />
+        </div>
         <Page currPage={currPage} opts={opts} setTotalNum={setTotalNum} />
         <div style={{ display: 'none' }}>
           <Page currPage={currPage + 1} opts={opts} />
