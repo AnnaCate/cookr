@@ -1,5 +1,8 @@
 import React from 'react'
 import { useRouter } from 'next/router'
+import dbConnect from '../utils/dbConnect'
+import Recipe from '../models/Recipe'
+
 import {
   Filter,
   Layout,
@@ -9,7 +12,11 @@ import {
   Search,
 } from '../components'
 
-export default function Index() {
+type Props = {
+  keywords: string[]
+}
+
+export default function Index(props: Props) {
   const router = useRouter()
   const { query } = router
   const { page = 1 } = query
@@ -62,7 +69,11 @@ export default function Index() {
       <div className={`mb-4 mt-4 flex-grow`}>
         <Search setSearchQuery={setSearchQuery} />
         <div className="my-4">
-          <Filter filter={filter} setFilter={setFilter} />
+          <Filter
+            filter={filter}
+            setFilter={setFilter}
+            keywords={props.keywords}
+          />
         </div>
         <Page currPage={currPage} opts={opts} setTotalNum={setTotalNum} />
         <div style={{ display: 'none' }}>
@@ -76,4 +87,16 @@ export default function Index() {
       />
     </Layout>
   )
+}
+
+export async function getStaticProps() {
+  await dbConnect()
+
+  const keywords = await Recipe.distinct('keywords')
+  const split = keywords.flatMap((v) => v.split(',').map((kw) => kw.trim()))
+  const deduplicated = [...new Set(split)].sort().filter((v) => v)
+  return {
+    props: { keywords: deduplicated },
+    revalidate: 60 * 5,
+  }
 }

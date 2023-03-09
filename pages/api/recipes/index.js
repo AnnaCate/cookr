@@ -6,7 +6,13 @@ export default async function handler(req, res) {
   await dbConnect()
 
   const { method, query } = req
-  const { recipeCategory = '', search = '', skip = 0, userId } = query
+  const {
+    keywords = '',
+    recipeCategory = '',
+    search = '',
+    skip = 0,
+    userId,
+  } = query
 
   // create query filters and constraints
   const userFilter = userId ? { submittedBy: userId } : {}
@@ -28,9 +34,20 @@ export default async function handler(req, res) {
         })),
       }
     : {}
-
+  const keywordsFilter = keywords
+    ? {
+        $or: keywords.split(',').map((kw) => ({
+          keywords: { $regex: kw, $options: 'i' },
+        })),
+      }
+    : {}
   const findQuery = {
-    $and: [{ ...userFilter }, { ...searchFilter }, { ...recipeCategoryFilter }],
+    $and: [
+      { ...userFilter },
+      { ...searchFilter },
+      { ...recipeCategoryFilter },
+      { ...keywordsFilter },
+    ],
   }
 
   const skipNum = Number(skip)
