@@ -39,7 +39,7 @@ export const Page = ({
 
   const { data, error } = useSWR(
     `/api/recipes?skip=${
-      (currPage - 1) * 8
+      (currPage - 1) * 10
     }&search=${searchQuery}&userId=${userId}&recipeCategory=${recipeCategoryFilters}`,
     fetcher,
   )

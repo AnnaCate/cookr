@@ -1,7 +1,14 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
-import { Layout, Page, PageHeader, Pagination, Search } from '../components'
+import {
+  Filter,
+  Layout,
+  Page,
+  PageHeader,
+  Pagination,
+  Search,
+} from '../components'
 
 export default function Me({ mongoUser }: { mongoUser: string | null }) {
   const router = useRouter()
@@ -11,6 +18,12 @@ export default function Me({ mongoUser }: { mongoUser: string | null }) {
 
   const [currPage, setCurrPage] = React.useState(parsedPage)
   const [searchQuery, setSearchQuery] = React.useState('')
+  const [filter, setFilter] = React.useState<
+    {
+      type: 'recipeCategory' | 'keywords'
+      filter: { label: string; value: string }
+    }[]
+  >([])
   const [totalNum, setTotalNum] = React.useState(0)
 
   // Pagination
@@ -40,6 +53,7 @@ export default function Me({ mongoUser }: { mongoUser: string | null }) {
   }, [page])
 
   const opts = {
+    filter,
     searchQuery,
     userId: mongoUser,
   }
@@ -52,6 +66,9 @@ export default function Me({ mongoUser }: { mongoUser: string | null }) {
         <PageHeader title="My Recipes" />
         <div className={`mb-4 mt-4 flex-grow`}>
           <Search setSearchQuery={setSearchQuery} />
+          <div className="my-4">
+            <Filter filter={filter} setFilter={setFilter} />
+          </div>
           <Page currPage={currPage} opts={opts} setTotalNum={setTotalNum} />
           <div style={{ display: 'none' }}>
             <Page currPage={currPage + 1} opts={opts} />
@@ -60,7 +77,7 @@ export default function Me({ mongoUser }: { mongoUser: string | null }) {
         <Pagination
           currPage={currPage}
           handlePaginate={handlePaginate}
-          numPages={Math.ceil(totalNum / 8)}
+          numPages={Math.ceil(totalNum / 10)}
         />
       </Layout>
     )
@@ -69,16 +86,17 @@ export default function Me({ mongoUser }: { mongoUser: string | null }) {
 
 export const getServerSideProps = withPageAuthRequired({
   returnTo: '/me',
-  async getServerSideProps(ctx) {
-    const session = getSession(ctx.req, ctx.res)
+  async getServerSideProps({ req, res }) {
+    const session = getSession(req, res)
     if (session) {
-      const res = await fetch(
+      const result = await fetch(
         `${process.env.VERCEL_URL}/api/users/${session.user.sub}`,
       )
-      if (!res.ok) {
-        throw new Error(res.statusText)
+      if (!result.ok) {
+        const { statusText } = result
+        throw new Error(statusText)
       }
-      const { data: user } = await res.json()
+      const { data: user } = await result.json()
       return { props: { mongoUser: user._id } }
     }
     return { props: { mongoUser: null } }

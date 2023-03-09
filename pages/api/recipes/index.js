@@ -7,53 +7,33 @@ export default async function handler(req, res) {
 
   const { method, query } = req
   const { recipeCategory = '', search = '', skip = 0, userId } = query
+
+  // create query filters and constraints
   const userFilter = userId ? { submittedBy: userId } : {}
+  const searchFilter = search
+    ? {
+        $or: [
+          { name: { $regex: search, $options: 'i' } },
+          {
+            'ingredients.ingredients': { $regex: search, $options: 'i' },
+          },
+          { keywords: { $regex: search, $options: 'i' } },
+        ],
+      }
+    : {}
+  const recipeCategoryFilter = recipeCategory
+    ? {
+        $or: recipeCategory.split(',').map((category) => ({
+          recipeCategory: category,
+        })),
+      }
+    : {}
+
+  const findQuery = {
+    $and: [{ ...userFilter }, { ...searchFilter }, { ...recipeCategoryFilter }],
+  }
 
   const skipNum = Number(skip)
-
-  const recipeCategories = recipeCategory.split(',').map((category) => ({
-    recipeCategory: category,
-  }))
-
-  /**
-   * @todo clean this up, it's a mess and doesn't scale
-   */
-  const findQuery = search
-    ? recipeCategory
-      ? {
-          $and: [
-            { ...userFilter },
-            {
-              $or: [
-                { name: { $regex: search, $options: 'i' } },
-                {
-                  'ingredients.ingredients': { $regex: search, $options: 'i' },
-                },
-                { keywords: { $regex: search, $options: 'i' } },
-              ],
-            },
-            { $or: recipeCategories },
-          ],
-        }
-      : {
-          $and: [
-            { ...userFilter },
-            {
-              $or: [
-                { name: { $regex: search, $options: 'i' } },
-                {
-                  'ingredients.ingredients': { $regex: search, $options: 'i' },
-                },
-                { keywords: { $regex: search, $options: 'i' } },
-              ],
-            },
-          ],
-        }
-    : recipeCategory
-    ? {
-        $and: [{ ...userFilter }, { $or: recipeCategories }],
-      }
-    : { ...userFilter }
 
   switch (method) {
     case 'GET':
@@ -62,7 +42,7 @@ export default async function handler(req, res) {
           .populate('submittedBy', 'name')
           .sort('name')
           .skip(skipNum)
-          .limit(8)
+          .limit(10)
 
         const totalNum = await Recipe.countDocuments(findQuery).exec()
         res.status(200).json({ success: true, data: { recipes, totalNum } })
@@ -73,11 +53,8 @@ export default async function handler(req, res) {
       break
     case 'POST':
       try {
-        console.log(req.body)
-        const recipe = await Recipe.create(
-          req.body,
-        ) /* create a new model in the database */
-        console.log('recipe', recipe)
+        // create a new model in the database
+        const recipe = await Recipe.create(req.body)
 
         // add recipe to user profile
         const user = await User.findByIdAndUpdate(
@@ -85,7 +62,6 @@ export default async function handler(req, res) {
           { $push: { recipes: recipe._id } },
           { safe: true, upsert: true, new: true },
         )
-        console.log('user.recipes', user.recipes)
 
         res.status(201).json({ success: true, data: recipe })
       } catch (error) {
