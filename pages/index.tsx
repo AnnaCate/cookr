@@ -72,7 +72,7 @@ export default function Index() {
       <Pagination
         currPage={currPage}
         handlePaginate={handlePaginate}
-        numPages={Math.ceil(totalNum / 8)}
+        numPages={Math.ceil(totalNum / 10)}
       />
     </Layout>
   )
