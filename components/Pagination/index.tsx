@@ -69,7 +69,10 @@ export function Pagination({
             return typeof v === 'number' ? (
               <PageNum key={v} num={v} />
             ) : (
-              <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
+              <span
+                key={v}
+                className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
+              >
                 ...
               </span>
             )
@@ -101,7 +104,10 @@ export function Pagination({
               return typeof v === 'number' ? (
                 <PageNum key={v} num={v} />
               ) : (
-                <span className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
+                <span
+                  key={v}
+                  className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
+                >
                   ...
                 </span>
               )

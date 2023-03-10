@@ -41,7 +41,7 @@ export function KeywordDropdown(props: Props) {
                 (v) => v.type === 'keywords' && v.filter.value === kw,
               ).length > 0
             return (
-              <Menu.Item>
+              <Menu.Item key={kw}>
                 {({ active }) => (
                   <button
                     className={classNames(
