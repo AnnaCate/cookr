@@ -19,7 +19,7 @@ export const Page = ({
   setTotalNum?: React.Dispatch<React.SetStateAction<number>>
   opts?: {
     filter?: {
-      type: 'recipeCategory' | 'keywords'
+      type: 'recipeCategory' | 'keywords' | 'suitableForDiet'
       filter: {
         label: string
         value: string
@@ -42,10 +42,15 @@ export const Page = ({
     .map((v) => v.filter.value)
     .join(',')
 
+  const dietFilters = filter
+    .filter((v) => v.type === 'suitableForDiet')
+    .map((v) => v.filter.value)
+    .join(',')
+
   const { data, error } = useSWR(
     `/api/recipes?skip=${
       (currPage - 1) * 10
-    }&search=${searchQuery}&userId=${userId}&recipeCategory=${recipeCategoryFilters}&keywords=${keywordsFilters}`,
+    }&search=${searchQuery}&userId=${userId}&recipeCategory=${recipeCategoryFilters}&keywords=${keywordsFilters}&suitableForDiet=${dietFilters}`,
     fetcher,
   )
 

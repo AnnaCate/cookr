@@ -7,13 +7,12 @@ function classNames(...classes) {
 
 type Props = {
   filters: {
-    type: 'recipeCategory' | 'keywords'
+    type: 'recipeCategory' | 'keywords' | 'suitableForDiet'
     filter: {
       label: string
       value: string
     }
   }[]
-  keywords: string[]
   handleSelection: (
     criteria: string,
     selection: {
@@ -21,8 +20,10 @@ type Props = {
       value: string
     },
   ) => void
+  options: { label: string; value: string }[]
+  type: 'recipeCategory' | 'keywords' | 'suitableForDiet'
 }
-export function KeywordDropdown(props: Props) {
+export function FilterDropdown(props: Props) {
   return (
     <Transition
       as={Fragment}
@@ -33,15 +34,15 @@ export function KeywordDropdown(props: Props) {
       leaveFrom="transform opacity-100 scale-100"
       leaveTo="transform opacity-0 scale-95"
     >
-      <Menu.Items className="absolute right-0 z-10 mt-2 w-36 max-h-96 overflow-y-scroll origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+      <Menu.Items className="absolute right-0 z-10 mt-2 w-fit max-h-80 overflow-y-scroll origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
         <div className="py-1">
-          {props.keywords.map((kw) => {
+          {props.options.map((option) => {
             const isSelected =
               props.filters.filter(
-                (v) => v.type === 'keywords' && v.filter.value === kw,
+                (v) => v.type === props.type && v.filter.value === option.value,
               ).length > 0
             return (
-              <Menu.Item key={kw}>
+              <Menu.Item key={option.value}>
                 {({ active }) => (
                   <button
                     className={classNames(
@@ -53,14 +54,9 @@ export function KeywordDropdown(props: Props) {
                       'block px-4 py-2 text-sm w-full text-left my-1',
                     )}
                     type="button"
-                    onClick={() =>
-                      props.handleSelection('keywords', {
-                        label: kw,
-                        value: kw,
-                      })
-                    }
+                    onClick={() => props.handleSelection(props.type, option)}
                   >
-                    {kw}
+                    {option.label}
                   </button>
                 )}
               </Menu.Item>
