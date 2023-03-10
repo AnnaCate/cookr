@@ -1,6 +1,9 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
+import dbConnect from '../utils/dbConnect'
+import Recipe from '../models/Recipe'
+
 import {
   Filter,
   Layout,
@@ -10,7 +13,13 @@ import {
   Search,
 } from '../components'
 
-export default function Me({ mongoUser }: { mongoUser: string | null }) {
+export default function Me({
+  keywords,
+  mongoUser,
+}: {
+  keywords: string[]
+  mongoUser: string | null
+}) {
   const router = useRouter()
   const { query } = router
   const { page = 1 } = query
@@ -67,7 +76,7 @@ export default function Me({ mongoUser }: { mongoUser: string | null }) {
         <div className={`mb-4 mt-4 flex-grow`}>
           <Search setSearchQuery={setSearchQuery} />
           <div className="my-4">
-            <Filter filter={filter} setFilter={setFilter} />
+            <Filter filter={filter} setFilter={setFilter} keywords={keywords} />
           </div>
           <Page currPage={currPage} opts={opts} setTotalNum={setTotalNum} />
           <div style={{ display: 'none' }}>
@@ -97,8 +106,17 @@ export const getServerSideProps = withPageAuthRequired({
         throw new Error(statusText)
       }
       const { data: user } = await result.json()
-      return { props: { mongoUser: user._id } }
+
+      await dbConnect()
+      const { _id } = user
+      const keywords = await Recipe.distinct('keywords', {
+        submittedBy: _id,
+      })
+      const split = keywords.flatMap((v) => v.split(',').map((kw) => kw.trim()))
+      const deduplicated = [...new Set(split)].sort().filter((v) => v)
+
+      return { props: { keywords: deduplicated, mongoUser: user._id } }
     }
-    return { props: { mongoUser: null } }
+    return { props: { keywords: [], mongoUser: null } }
   },
 })

@@ -37,10 +37,15 @@ export const Page = ({
     .map((v) => v.filter.value)
     .join(',')
 
+  const keywordsFilters = filter
+    .filter((v) => v.type === 'keywords')
+    .map((v) => v.filter.value)
+    .join(',')
+
   const { data, error } = useSWR(
     `/api/recipes?skip=${
       (currPage - 1) * 10
-    }&search=${searchQuery}&userId=${userId}&recipeCategory=${recipeCategoryFilters}`,
+    }&search=${searchQuery}&userId=${userId}&recipeCategory=${recipeCategoryFilters}&keywords=${keywordsFilters}`,
     fetcher,
   )
 

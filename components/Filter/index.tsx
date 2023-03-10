@@ -1,5 +1,6 @@
 import React from 'react'
 import { CategoryDropdown } from './CategoryDropdown'
+import { KeywordDropdown } from './KeywordDropdown'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faX } from '@fortawesome/free-solid-svg-icons'
 import { Menu } from '@headlessui/react'
@@ -12,6 +13,7 @@ type Props = {
       value: string
     }
   }[]
+  keywords: string[]
   setFilter: React.Dispatch<
     React.SetStateAction<
       {
@@ -32,6 +34,7 @@ type Props = {
 
 export const Filter = (props: Props) => {
   const [openCategory, setOpenCategory] = React.useState(false)
+  const [openKeywords, setOpenKeywords] = React.useState(false)
 
   const [nums, setNums] = React.useState({
     recipeCategory: 0,
@@ -59,18 +62,14 @@ export const Filter = (props: Props) => {
     setOpenCategory(true)
   }
 
-  /**
-   * @todo
-   * get all unique values for keywords: `db.collection.distinct('x')`
-   */
+  const handleSelectKeyword = () => {
+    setOpenKeywords(true)
+  }
 
   return (
     <>
-      <Menu
-        as="div"
-        className="w-full sm:px-8 py-4 flex flex-row items-center justify-center border-b border-gray-200"
-      >
-        <div className="relative">
+      <div className="w-full sm:px-8 py-4 flex flex-row items-center justify-center border-b border-gray-200">
+        <Menu as="div" className="relative">
           <Menu.Button
             className="flex flex-row items-center justify-center space-x-2 px-3 sm:px-6 border-r-2 border-gray-200"
             onClick={handleSelectCategory}
@@ -92,23 +91,31 @@ export const Filter = (props: Props) => {
               filters={props.filter}
             />
           )}
-        </div>
-        {/* <button
-          id="keywords"
-          type="button"
-          className="flex flex-row items-center justify-center space-x-2 px-3 sm:px-6 border-r-2 border-gray-200"
-        >
-          <span className="text-base text-gray-500">Keywords</span>
-          {nums.keywords > 0 && (
-            <span className="bg-gray-200 rounded-md px-2 text-base text-gray-500">
-              {nums.keywords}
-            </span>
+        </Menu>
+        <Menu as="div" className="relative">
+          <Menu.Button
+            className="flex flex-row items-center justify-center space-x-2 px-3 sm:px-6"
+            onClick={handleSelectKeyword}
+          >
+            <span className="text-base text-gray-500">Keywords</span>
+            {nums.keywords > 0 && (
+              <span className="bg-gray-200 rounded-md px-2 text-base text-gray-500">
+                {nums.keywords}
+              </span>
+            )}
+            <FontAwesomeIcon
+              className="text-gray-500 w-5 h-5"
+              icon={faAngleDown}
+            />
+          </Menu.Button>
+          {openKeywords && (
+            <KeywordDropdown
+              handleSelection={handleSelection}
+              filters={props.filter}
+              keywords={props.keywords}
+            />
           )}
-          <FontAwesomeIcon
-            className="text-gray-500 w-5 h-5"
-            icon={faAngleDown}
-          />
-        </button> */}
+        </Menu>
         {/* <button
           id="keywords"
           type="button"
@@ -132,7 +139,7 @@ export const Filter = (props: Props) => {
           handleSelection('category', selection)
         }
       /> */}
-      </Menu>
+      </div>
       {(nums.recipeCategory > 0 ||
         nums.keywords > 0 ||
         nums.submittedBy > 0) && (
