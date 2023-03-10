@@ -7,6 +7,7 @@ import { formatCategory } from '../../utils/format-category'
 import dbConnect from '../../utils/dbConnect'
 import Recipe from '../../models/Recipe'
 import { Layout } from '../../components'
+import { titleCase } from '../../utils/title-case'
 
 export default function RecipeDetails({ recipe }) {
   const router = useRouter()
@@ -93,7 +94,7 @@ export default function RecipeDetails({ recipe }) {
             <div className="flex flex-row space-x-3">
               {recipe.suitableForDiet.map((diet) => (
                 <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-sm font-medium text-gray-800">
-                  {formatDiet(diet)}
+                  {titleCase(diet)}
                 </span>
               ))}
             </div>
@@ -169,11 +170,4 @@ export async function getServerSideProps({ params }) {
       },
     },
   }
-}
-
-function formatDiet(diet) {
-  return diet
-    .split('-')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ')
 }

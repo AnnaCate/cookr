@@ -1,5 +1,6 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
+import { titleCase } from '../../utils/title-case'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -34,7 +35,7 @@ export function FilterDropdown(props: Props) {
       leaveFrom="transform opacity-100 scale-100"
       leaveTo="transform opacity-0 scale-95"
     >
-      <Menu.Items className="absolute right-0 z-10 mt-2 w-fit max-h-80 overflow-y-scroll origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+      <Menu.Items className="absolute whitespace-nowrap right-0 z-10 mt-2 w-fit max-h-80 overflow-y-scroll origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
         <div className="py-1">
           {props.options.map((option) => {
             const isSelected =
@@ -56,7 +57,7 @@ export function FilterDropdown(props: Props) {
                     type="button"
                     onClick={() => props.handleSelection(props.type, option)}
                   >
-                    {option.label}
+                    {titleCase(option.label)}
                   </button>
                 )}
               </Menu.Item>

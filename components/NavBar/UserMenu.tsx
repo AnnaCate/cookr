@@ -6,7 +6,7 @@ export function UserDropdown(user: any) {
       <ul className="w-full">
         <li className="w-full text-right cursor-pointer hover:bg-gray-200 text-gray-700 p-4">
           <a
-            className="w-full text-right cursor-pointer hover:bg-gray-200 text-gray-700 p-4"
+            className="w-full text-right cursor-pointer hover:bg-gray-200 text-gray-700 p-4 whitespace-nowrap"
             href="/me"
           >
             My Recipes
