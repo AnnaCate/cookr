@@ -11,6 +11,7 @@ export default async function handler(req, res) {
     recipeCategory = '',
     search = '',
     skip = 0,
+    suitableForDiet = '',
     userId,
   } = query
 
@@ -36,17 +37,26 @@ export default async function handler(req, res) {
     : {}
   const keywordsFilter = keywords
     ? {
-        $or: keywords.split(',').map((kw) => ({
+        $and: keywords.split(',').map((kw) => ({
           keywords: { $regex: kw, $options: 'i' },
         })),
       }
     : {}
+  const dietsFilter = suitableForDiet
+    ? {
+        $and: suitableForDiet.split(',').map((diet) => ({
+          suitableForDiet: { $regex: diet, $options: 'i' },
+        })),
+      }
+    : {}
+
   const findQuery = {
     $and: [
       { ...userFilter },
       { ...searchFilter },
       { ...recipeCategoryFilter },
       { ...keywordsFilter },
+      { ...dietsFilter },
     ],
   }
 

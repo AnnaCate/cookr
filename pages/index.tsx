@@ -26,7 +26,7 @@ export default function Index(props: Props) {
   const [searchQuery, setSearchQuery] = React.useState('')
   const [filter, setFilter] = React.useState<
     {
-      type: 'recipeCategory' | 'keywords'
+      type: 'recipeCategory' | 'keywords' | 'suitableForDiet'
       filter: { label: string; value: string }
     }[]
   >([])

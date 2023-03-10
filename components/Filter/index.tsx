@@ -1,12 +1,11 @@
 import React from 'react'
-import { CategoryDropdown } from './CategoryDropdown'
-import { KeywordDropdown } from './KeywordDropdown'
+import { FilterDropdown } from './Dropdown'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faX } from '@fortawesome/free-solid-svg-icons'
 import { Menu } from '@headlessui/react'
 
 type Filter = {
-  type: 'recipeCategory' | 'keywords'
+  type: 'recipeCategory' | 'keywords' | 'suitableForDiet'
   filter: {
     label: string
     value: string
@@ -20,17 +19,20 @@ type Props = {
 }
 
 export const Filter = (props: Props) => {
-  const [openCategory, setOpenCategory] = React.useState(false)
-  const [openKeywords, setOpenKeywords] = React.useState(false)
+  const [open, setOpen] = React.useState({
+    recipeCategory: false,
+    keywords: false,
+    suitableForDiet: false,
+  })
 
   const [nums, setNums] = React.useState({
     recipeCategory: 0,
     keywords: 0,
-    submittedBy: 0,
+    suitableForDiet: 0,
   })
 
   const handleSelection = (
-    criteria: 'recipeCategory' | 'keywords',
+    criteria: 'recipeCategory' | 'keywords' | 'suitableForDiet',
     selection: { label: string; value: string },
   ) => {
     const didDeselect =
@@ -63,13 +65,8 @@ export const Filter = (props: Props) => {
     }
   }
 
-  const handleSelectCategory = () => {
-    setOpenCategory(true)
-  }
-
-  const handleSelectKeyword = () => {
-    setOpenKeywords(true)
-  }
+  const handleOpenDropdown = (type: string) =>
+    setOpen({ ...open, [type]: true })
 
   return (
     <>
@@ -77,7 +74,7 @@ export const Filter = (props: Props) => {
         <Menu as="div" className="relative">
           <Menu.Button
             className="flex flex-row items-center justify-center space-x-2 px-3 sm:px-6 border-r-2 border-gray-200"
-            onClick={handleSelectCategory}
+            onClick={() => handleOpenDropdown('recipeCategory')}
           >
             <span className="text-base text-gray-500">Category</span>
             {nums.recipeCategory > 0 && (
@@ -90,17 +87,45 @@ export const Filter = (props: Props) => {
               icon={faAngleDown}
             />
           </Menu.Button>
-          {openCategory && (
-            <CategoryDropdown
+          {open.recipeCategory && (
+            <FilterDropdown
               handleSelection={handleSelection}
               filters={props.filter}
+              options={CATEGORY_OPTIONS}
+              type="recipeCategory"
             />
           )}
         </Menu>
         <Menu as="div" className="relative">
           <Menu.Button
+            className="flex flex-row items-center justify-center space-x-2 px-3 sm:px-6 border-r-2 border-gray-200"
+            onClick={() => handleOpenDropdown('suitableForDiet')}
+          >
+            <span className="text-base text-gray-500">Diet</span>
+            {nums.suitableForDiet > 0 && (
+              <span className="bg-gray-200 rounded-md px-2 text-base text-gray-500">
+                {nums.suitableForDiet}
+              </span>
+            )}
+            <FontAwesomeIcon
+              className="text-gray-500 w-5 h-5"
+              icon={faAngleDown}
+            />
+          </Menu.Button>
+          {open.suitableForDiet && (
+            <FilterDropdown
+              handleSelection={handleSelection}
+              filters={props.filter}
+              options={SUITABLE_FOR_DIET}
+              type="suitableForDiet"
+            />
+          )}
+        </Menu>
+
+        <Menu as="div" className="relative">
+          <Menu.Button
             className="flex flex-row items-center justify-center space-x-2 px-3 sm:px-6"
-            onClick={handleSelectKeyword}
+            onClick={() => handleOpenDropdown('keywords')}
           >
             <span className="text-base text-gray-500">Keywords</span>
             {nums.keywords > 0 && (
@@ -113,41 +138,19 @@ export const Filter = (props: Props) => {
               icon={faAngleDown}
             />
           </Menu.Button>
-          {openKeywords && (
-            <KeywordDropdown
+          {open.keywords && (
+            <FilterDropdown
               handleSelection={handleSelection}
               filters={props.filter}
-              keywords={props.keywords}
+              options={props.keywords.map((kw) => ({ label: kw, value: kw }))}
+              type="keywords"
             />
           )}
         </Menu>
-        {/* <button
-          id="keywords"
-          type="button"
-          className="flex flex-row items-center justify-center space-x-2 px-3 sm:px-6"
-        >
-          <span className="text-base text-gray-500">Submitted By</span>
-          {nums.submittedBy > 0 && (
-            <span className="bg-gray-200 rounded-md px-2 text-base text-gray-500">
-              {nums.submittedBy}
-            </span>
-          )}
-          <FontAwesomeIcon
-            className="text-gray-500 w-5 h-5"
-            icon={faAngleDown}
-          />
-        </button> */}
-        {/* <Criteria
-        label="Category"
-        options={CATEGORY_OPTIONS}
-        onSelect={(selection: { label: string; value: string }) =>
-          handleSelection('category', selection)
-        }
-      /> */}
       </div>
       {(nums.recipeCategory > 0 ||
         nums.keywords > 0 ||
-        nums.submittedBy > 0) && (
+        nums.suitableForDiet > 0) && (
         <div className="w-full sm:px-8 py-3 flex flex-row items-center justify-start bg-gray-100 overflow-x-scroll">
           <div className="border-r-2 border-gray-200 text-gray-500 pr-4 mr-4">
             Filters:
@@ -157,7 +160,7 @@ export const Filter = (props: Props) => {
               <button
                 key={v.filter.value}
                 type="button"
-                className="bg-white rounded-full px-3 py-2 border border-gray-200 flex items-center"
+                className="bg-white rounded-full px-3 py-1 sm:py-2 border border-gray-200 flex items-center whitespace-nowrap"
                 onClick={() => {
                   handleSelection(v.type, v.filter)
                 }}
@@ -175,3 +178,61 @@ export const Filter = (props: Props) => {
     </>
   )
 }
+
+const CATEGORY_OPTIONS = [
+  {
+    value: 'appetizer',
+    label: 'Appetizer',
+  },
+  {
+    value: 'beverage',
+    label: 'Beverage',
+  },
+  {
+    value: 'breakfast_brunch',
+    label: 'Breakfast/Brunch',
+  },
+  {
+    value: 'bread',
+    label: 'Bread',
+  },
+  {
+    value: 'dessert',
+    label: 'Dessert',
+  },
+  {
+    value: 'main',
+    label: 'Main',
+  },
+  {
+    value: 'side',
+    label: 'Side',
+  },
+  {
+    value: 'snack',
+    label: 'Snack',
+  },
+  {
+    value: 'other',
+    label: 'Other',
+  },
+]
+
+const SUITABLE_FOR_DIET = [
+  { label: 'Dairy Free', value: 'dairy-free' },
+  { label: 'Gluten Free', value: 'gluten-free' },
+  { label: 'Low Carb', value: 'low-carb' },
+  { label: 'Low Cholesterol', value: 'low-cholesterol' },
+  { label: 'High Protein', value: 'high-protein' },
+  {
+    label: 'Paleo',
+    value: 'paleo',
+  },
+  { label: 'Pescatarian', value: 'pescatarian' },
+  { label: 'Vegetarian', value: 'vegetarian' },
+  { label: 'Vegan', value: 'vegan' },
+  {
+    label: 'Whole30',
+    value: 'whole30',
+  },
+]
