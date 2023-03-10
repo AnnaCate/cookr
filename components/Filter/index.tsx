@@ -5,32 +5,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faX } from '@fortawesome/free-solid-svg-icons'
 import { Menu } from '@headlessui/react'
 
-type Props = {
+type Filter = {
+  type: 'recipeCategory' | 'keywords'
   filter: {
-    type: 'recipeCategory' | 'keywords'
-    filter: {
-      label: string
-      value: string
-    }
-  }[]
-  keywords: string[]
-  setFilter: React.Dispatch<
-    React.SetStateAction<
-      {
-        type: 'recipeCategory' | 'keywords'
-        filter: {
-          label: string
-          value: string
-        }
-      }[]
-    >
-  >
+    label: string
+    value: string
+  }
 }
 
-/**
- * @todo
- * add support for removing a category from the filter selections
- */
+type Props = {
+  filter: Filter[]
+  keywords: string[]
+  setFilter: React.Dispatch<React.SetStateAction<Filter[]>>
+}
 
 export const Filter = (props: Props) => {
   const [openCategory, setOpenCategory] = React.useState(false)
@@ -46,16 +33,34 @@ export const Filter = (props: Props) => {
     criteria: 'recipeCategory' | 'keywords',
     selection: { label: string; value: string },
   ) => {
-    setNums({
-      ...nums,
-      [criteria]: nums[criteria] + 1,
-    })
+    const didDeselect =
+      props.filter.filter(
+        (v) => v.type === criteria && v.filter.value === selection.value,
+      ).length > 0
     const filterArray = [...props.filter]
-    filterArray.push({
-      type: criteria,
-      filter: selection,
-    })
-    props.setFilter(filterArray)
+
+    if (didDeselect) {
+      setNums({
+        ...nums,
+        [criteria]: nums[criteria] - 1,
+      })
+      const newArray = filterArray.filter(
+        (v) =>
+          (v.type === criteria && v.filter.value !== selection.value) ||
+          v.type !== criteria,
+      )
+      props.setFilter(newArray)
+    } else {
+      setNums({
+        ...nums,
+        [criteria]: nums[criteria] + 1,
+      })
+      filterArray.push({
+        type: criteria,
+        filter: selection,
+      })
+      props.setFilter(filterArray)
+    }
   }
 
   const handleSelectCategory = () => {
@@ -150,8 +155,12 @@ export const Filter = (props: Props) => {
           <div className="w-full flex space-x-3">
             {props.filter.map((v) => (
               <button
+                key={v.filter.value}
                 type="button"
                 className="bg-white rounded-full px-3 py-2 border border-gray-200 flex items-center"
+                onClick={() => {
+                  handleSelection(v.type, v.filter)
+                }}
               >
                 {v.filter.label}
                 <FontAwesomeIcon

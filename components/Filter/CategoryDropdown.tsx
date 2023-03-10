@@ -86,7 +86,7 @@ export function CategoryDropdown(props: Props) {
                   v.filter.value === option.value,
               ).length > 0
             return (
-              <Menu.Item>
+              <Menu.Item key={option.value}>
                 {({ active }) => (
                   <button
                     className={classNames(
