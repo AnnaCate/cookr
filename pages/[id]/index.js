@@ -90,6 +90,13 @@ export default function RecipeDetails({ recipe }) {
             <p className="c-input-label text-gray-900">
               Yield: <span className="font-normal">{recipe.recipeYield}</span>
             </p>
+            <div className="flex flex-row space-x-3">
+              {recipe.suitableForDiet.map((diet) => (
+                <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-sm font-medium text-gray-800">
+                  {formatDiet(diet)}
+                </span>
+              ))}
+            </div>
             <hr className="my-4" />
             <div>
               <p className="c-input-label c-view">Ingredients:</p>
@@ -162,4 +169,11 @@ export async function getServerSideProps({ params }) {
       },
     },
   }
+}
+
+function formatDiet(diet) {
+  return diet
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ')
 }
