@@ -58,6 +58,7 @@ function EditRecipe() {
     recipeInstructions: recipe.recipeInstructions,
     recipeYield: recipe.recipeYield,
     submittedBy: recipe.submittedBy,
+    suitableForDiet: recipe.suitableForDiet,
     totalTime: recipe.totalTime,
   }
 

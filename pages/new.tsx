@@ -12,7 +12,6 @@ import { getMongoUser } from '../utils/get-mongo.user'
 const NewRecipe = () => {
   const router = useRouter()
   const { user: auth0User } = useUser()
-  console.log('auth0User', auth0User)
   const recipeForm: Recipe.Base = {
     description: '',
     image: '',
@@ -24,6 +23,7 @@ const NewRecipe = () => {
     ingredients: [{ header: '', id: uuid(), ingredients: '' }],
     recipeInstructions: '',
     recipeYield: '',
+    suitableForDiet: [],
     name: '',
   }
 

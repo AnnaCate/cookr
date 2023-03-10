@@ -34,6 +34,7 @@ export function Form({
     originalSource: recipeForm.originalSource,
     recipeInstructions: recipeForm.recipeInstructions,
     recipeYield: recipeForm.recipeYield,
+    suitableForDiet: recipeForm.suitableForDiet,
   })
 
   const handleCategorySelection = (category: {
@@ -44,6 +45,19 @@ export function Form({
       ...form,
       recipeCategory: category.value,
     })
+  }
+
+  const handleDietChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const diets = [...form.suitableForDiet]
+    const dietWasDeselected =
+      diets.filter((v) => v === e.target.name).length > 0
+    if (dietWasDeselected) {
+      const newDiets = diets.filter((v) => v !== e.target.name)
+      setForm({ ...form, suitableForDiet: newDiets })
+    } else {
+      diets.push(e.target.name)
+      setForm({ ...form, suitableForDiet: diets })
+    }
   }
 
   const handleIngrChange = (
@@ -290,6 +304,82 @@ export function Form({
             handleChange={handleChange}
           />
           <div className="mb-6">
+            <label className="c-input-label" htmlFor="special-diets">
+              Special Diet(s)
+            </label>
+            <fieldset>
+              <legend className="sr-only">Special Diet(s)</legend>
+              <div className="sm:space-x-6 flex flex-col sm:flex-row justify-evenly flex-wrap">
+                {[
+                  {
+                    label: 'Gluten Free',
+                    value: 'gluten-free',
+                  },
+                  {
+                    label: 'Dairy Free',
+                    value: 'dairy-free',
+                  },
+                  {
+                    label: 'Vegetarian',
+                    value: 'vegetarian',
+                  },
+                  {
+                    label: 'Vegan',
+                    value: 'vegan',
+                  },
+                  {
+                    label: 'Pescatarian',
+                    value: 'pescatarian',
+                  },
+                  {
+                    label: 'Low Carb',
+                    value: 'low-carb',
+                  },
+                  {
+                    label: 'High Protein',
+                    value: 'high-protein',
+                  },
+                  {
+                    label: 'Low Cholesterol',
+                    value: 'low-cholesterol',
+                  },
+                  {
+                    label: 'Paleo',
+                    value: 'paleo',
+                  },
+                  {
+                    label: 'Whole30',
+                    value: 'whole30',
+                  },
+                ].map((diet) => (
+                  <div
+                    key={diet.value}
+                    className="relative flex flex-row flex-nowrap items-start"
+                  >
+                    <div className="flex h-6 items-center">
+                      <input
+                        id={diet.value}
+                        name={diet.value}
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                        onChange={handleDietChange}
+                        checked={form.suitableForDiet.includes(diet.value)}
+                      />
+                    </div>
+                    <div className="ml-2 text-sm leading-6">
+                      <label
+                        htmlFor={diet.value}
+                        className="font-medium text-gray-900"
+                      >
+                        {diet.label}
+                      </label>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </fieldset>
+          </div>
+          <div className="mb-6">
             <label className="c-input-label" htmlFor="keywords">
               Keywords
             </label>
@@ -300,7 +390,7 @@ export function Form({
               className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
               name="keywords"
               value={form.keywords}
-              placeholder="meal prep, grill, quick, paleo, summer"
+              placeholder="meal prep, grill, quick, summer"
               onChange={handleChange}
             />
           </div>
