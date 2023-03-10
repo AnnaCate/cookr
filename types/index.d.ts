@@ -50,6 +50,7 @@ interface Nutrition {
 }
 
 export interface Tile {
+  id: string
   img: string
   difficulty?: string
   meal?: string

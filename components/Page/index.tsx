@@ -1,5 +1,4 @@
 import React from 'react'
-import { useRouter } from 'next/router'
 import useSWR from 'swr'
 
 import { Tile } from '../'
@@ -29,7 +28,6 @@ export const Page = ({
     userId?: string
   }
 }) => {
-  const router = useRouter()
   const { filter = [], searchQuery = '', userId = '' } = opts
 
   const recipeCategoryFilters = filter
@@ -75,9 +73,9 @@ export const Page = ({
             <div
               className="z-0 cursor-pointer w-full xs:w-auto mb-4 xs:mb-0"
               key={recipe._id}
-              onClick={() => router.push(`/${recipe._id}`)}
             >
               <Tile
+                id={recipe._id}
                 img={recipe.image}
                 meal={recipe.recipeCategory}
                 title={recipe.name}

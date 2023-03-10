@@ -1,4 +1,7 @@
 import React from 'react'
+import { useRouter } from 'next/router'
+import { useLoadingAnimation } from '../hooks/use-loading-animation'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faBowlFood,
@@ -13,10 +16,27 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { Tile as TileProps } from '../types'
 
-export function Tile({ img, meal, title, user, originalSource }: TileProps) {
+export function Tile({
+  id,
+  img,
+  meal,
+  title,
+  user,
+  originalSource,
+}: TileProps) {
   const icon = getIconByCategory(meal)
+  const router = useRouter()
+  const { ref, startLoading, endLoading } = useLoadingAnimation()
+
   return (
-    <div className="flex flex-col h-64 w-full xs:w-64 xs:m-2 rounded border bg-white shadow transform transition duration-300 xs:hover:shadow-md xs:hover:scale-105">
+    <div
+      ref={ref}
+      className="flex flex-col h-64 w-full xs:w-64 xs:m-2 rounded border bg-white shadow transform transition duration-300 xs:hover:shadow-md xs:hover:scale-105"
+      onClick={() => {
+        startLoading()
+        router.push(`/${id}`)
+      }}
+    >
       <div className="flex items-center justify-center grow overflow-hidden relative">
         <figure className="h-48 w-full">
           {img ? (
