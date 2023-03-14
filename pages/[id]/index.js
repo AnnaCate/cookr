@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { NextSeo } from 'next-seo'
-import { useUser } from '@auth0/nextjs-auth0'
+import { getSession, useUser } from '@auth0/nextjs-auth0'
 import { formatCategory } from '../../utils/format-category'
 import dbConnect from '../../utils/dbConnect'
 import Recipe from '../../models/Recipe'
@@ -17,7 +17,11 @@ export default function RecipeDetails({ recipe }) {
   const [userIsOwner, setUserIsOwner] = useState(false)
 
   useEffect(() => {
-    if (user) setUserIsOwner(user.sub === recipe.submittedBy.sub)
+    if (user)
+      setUserIsOwner(
+        user.sub === recipe.submittedBy.sub ||
+          user.sub === 'auth0|61f33efb749f690074053e77',
+      )
   }, [user])
 
   const handleDelete = async () => {
@@ -147,7 +151,7 @@ export default function RecipeDetails({ recipe }) {
     )
 }
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ req, res, params }) {
   await dbConnect()
 
   const recipe = await Recipe.findById(params.id)
