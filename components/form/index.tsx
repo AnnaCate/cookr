@@ -402,7 +402,7 @@ export function Form({
               Submit
             </button>
             <button
-              onClick={() => router.push('/')}
+              onClick={() => router.back()}
               type="button"
               className="w-full max-w-xs py-4 text-gray-400 hover:text-gray-500 rounded-xl border-none"
             >

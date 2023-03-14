@@ -23,7 +23,7 @@ function EditRecipe() {
       if (!res.ok) throw new Error(res.statusText)
       const { data } = await res.json()
       mutate(`/api/recipes/${id}`, data, false)
-      router.push('/')
+      router.back()
     } catch (error) {
       console.error(error)
     }
