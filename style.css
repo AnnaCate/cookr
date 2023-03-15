@@ -23,6 +23,10 @@ p {
 }
 
 @layer components {
+  #quill-wrapper div[data-placeholder]::before {
+    @apply text-gray-300 text-base not-italic;
+  }
+
   /* FORM COMPONENTS */
   .c-input-wrapper {
     @apply mb-6;
