@@ -36,6 +36,7 @@ export function Form({
     recipeYield: recipeForm.recipeYield,
     suitableForDiet: recipeForm.suitableForDiet,
   })
+  console.log(form)
 
   const handleCategorySelection = (category: {
     value: string
@@ -237,9 +238,10 @@ export function Form({
             {form.ingredients.map((ingredient, idx, arr) => (
               <div key={ingredient.id} className="group relative">
                 <IngredientsSubSection
+                  key={'ingredients'}
                   idx={idx}
                   state={form}
-                  handleChange={(e) => handleIngrChange(e, idx)}
+                  handleChange={(val) => handleIngrChange(val, idx)}
                 />
                 {arr.length > 1 && (
                   <button
