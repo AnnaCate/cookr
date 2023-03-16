@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { NextSeo } from 'next-seo'
-import { getSession, useUser } from '@auth0/nextjs-auth0'
+import { useUser } from '@auth0/nextjs-auth0'
 import { formatCategory } from '../../utils/format-category'
 import dbConnect from '../../utils/dbConnect'
 import Recipe from '../../models/Recipe'
 import { Layout } from '../../components'
 import { titleCase } from '../../utils/title-case'
+import { ImWarning } from 'react-icons/im'
 
 export default function RecipeDetails({ recipe }) {
   const router = useRouter()
@@ -69,7 +70,9 @@ export default function RecipeDetails({ recipe }) {
           >
             {recipe.untested && (
               <div className="mb-4 font-semibold bg-red-100 rounded-md py-2 px-4 max-w-max flex">
-                <span className="pr-2">⚠️</span>
+                <span className="pr-2 pt-1">
+                  <ImWarning style={{ color: '#FF0000' }} size="18" />
+                </span>
                 <p>
                   Proceed with caution - this recipe has not yet been tested by
                   the submitter.
