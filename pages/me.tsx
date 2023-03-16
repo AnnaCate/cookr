@@ -72,7 +72,7 @@ export default function Me({
   return (
     mongoUser && (
       <Layout>
-        <PageHeader title="My Recipes" />
+        <PageHeader title="My Recipes" center />
         <div className={`mb-4 mt-4 flex-grow`}>
           <Search setSearchQuery={setSearchQuery} />
           <div className="my-4">

@@ -10,7 +10,7 @@ export function NavBar() {
 
   return (
     <nav
-      className="bg-white flex flex-grow-0 items-stretch flex-shrink-0 shadow relative z-30 py-4 px-4 sm:px-8"
+      className="bg-white flex flex-grow-0 items-stretch flex-shrink-0 shadow relative z-30 py-2 px-4 sm:px-8"
       role="navigation"
       aria-label="main navigation"
     >
@@ -21,7 +21,8 @@ export function NavBar() {
             query: { page: '1' },
           }}
         >
-          <a className="text-gray-700 no-underline">Home</a>
+          {/* <a className="text-gray-700 no-underline">Home</a> */}
+          <a className="font-sacramento w-full text-6xl -mb-2">cookr</a>
         </Link>
       </div>
 

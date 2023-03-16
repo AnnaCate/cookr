@@ -6,7 +6,7 @@ export function PageHeader(props: {
   center?: boolean
 }) {
   return (
-    <header className="flex-grow-0 w-full mb-4 -mt-1">
+    <header className="flex-grow-0 w-full sm:mb-4 mt-2 sm:-mt-1">
       <h1
         className={`font-sacramento w-full text-7xl ${
           props.center ? 'text-center' : 'text-left'

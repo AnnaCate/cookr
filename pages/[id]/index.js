@@ -108,9 +108,9 @@ export default function RecipeDetails({ recipe }) {
             <p className="c-input-label text-gray-900">
               Yield: <span className="font-normal">{recipe.recipeYield}</span>
             </p>
-            <div className="flex flex-row space-x-3">
+            <div className="flex flex-row justify-start flex-wrap">
               {recipe.suitableForDiet.map((diet) => (
-                <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-sm font-medium text-gray-800">
+                <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-sm font-medium text-gray-800 whitespace-nowrap mb-2 mr-2">
                   {titleCase(diet)}
                 </span>
               ))}
@@ -133,15 +133,15 @@ export default function RecipeDetails({ recipe }) {
                 </>
               )}
               {userIsOwner && (
-                <div className="flex flex-row items-center my-6 sm:mb-0">
+                <div className="flex flex-col sm:flex-row w-full sm:w-auto items-center justify-center sm:justify-start my-6 sm:mb-0">
                   <Link href="/[id]/edit" as={`/${recipe._id}/edit`}>
-                    <a className="cursor-pointer text-center mr-6 py-4 px-6 text-white bg-gray-500 hover:bg-gray-600 rounded-xl focus:bg-gray-600">
+                    <a className="cursor-pointer text-center mb-4 sm:mb-0 sm:mr-6 py-4 px-6 text-white bg-gray-500 hover:bg-gray-600 rounded-xl focus:bg-gray-600 w-full sm:w-20">
                       <span>Edit</span>
                     </a>
                   </Link>
 
                   <button
-                    className="cursor-pointer text-center mr-4 p-4 w-20 text-white bg-red-300 hover:bg-red-500 rounded-xl focus:bg-red-500"
+                    className="cursor-pointer text-center sm:mr-4 p-4 sm:w-20 text-white bg-red-300 hover:bg-red-500 rounded-xl focus:bg-red-500 w-full"
                     type="button"
                     onClick={() => {
                       if (
