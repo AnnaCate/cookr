@@ -12,6 +12,7 @@ import {
   faJar,
 } from '@fortawesome/free-solid-svg-icons'
 import { Tile as TileProps } from '../types'
+import { ImWarning } from 'react-icons/im'
 
 export function Tile({
   img,
@@ -69,7 +70,7 @@ export function Tile({
           className="absolute bottom-1 right-2"
           title="This recipe is untested"
         >
-          ⚠️
+          <ImWarning style={{ color: '#FF0000' }} size="18" />
         </div>
       )}
     </div>
