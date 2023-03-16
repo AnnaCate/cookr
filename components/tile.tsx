@@ -13,10 +13,17 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { Tile as TileProps } from '../types'
 
-export function Tile({ img, meal, title, user, originalSource }: TileProps) {
+export function Tile({
+  img,
+  meal,
+  title,
+  user,
+  originalSource,
+  untested,
+}: TileProps) {
   const icon = getIconByCategory(meal)
   return (
-    <div className="flex flex-col h-64 w-full xs:w-64 xs:m-2 rounded border bg-white shadow transform transition duration-300 xs:hover:shadow-md xs:hover:scale-105">
+    <div className="flex flex-col h-64 w-full xs:w-64 xs:m-2 rounded border bg-white shadow transform transition duration-300 xs:hover:shadow-md xs:hover:scale-105 relative">
       <div className="flex items-center justify-center grow overflow-hidden relative">
         <figure className="h-48 w-full">
           {img ? (
@@ -57,6 +64,14 @@ export function Tile({ img, meal, title, user, originalSource }: TileProps) {
         </h3>
         <p className="text-xs text-gray-500">Submitted by: {user.name}</p>
       </div>
+      {untested && (
+        <div
+          className="absolute bottom-1 right-2"
+          title="This recipe is untested"
+        >
+          ⚠️
+        </div>
+      )}
     </div>
   )
 }

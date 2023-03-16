@@ -88,6 +88,7 @@ export const Page = ({
                 title={recipe.name}
                 user={recipe.submittedBy}
                 originalSource={recipe.originalSource}
+                untested={recipe.untested}
               />
             </div>
           ))}
