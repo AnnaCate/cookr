@@ -62,10 +62,20 @@ export default function RecipeDetails({ recipe }) {
             <a href="/">Recipes</a> &gt;{' '}
             {formatCategory(recipe.recipeCategory).label}
           </p>
+
           <div
             key={recipe._id}
             className="sm:bg-white sm:p-6 sm:rounded-xl sm:shadow-sm"
           >
+            {recipe.untested && (
+              <div className="mb-4 font-semibold bg-red-100 rounded-md py-2 px-4 max-w-max flex">
+                <span className="pr-2">⚠️</span>
+                <p>
+                  Proceed with caution - this recipe has not yet been tested by
+                  the submitter.
+                </p>
+              </div>
+            )}
             <h1 className="text-3xl font-semibold dark:text-gray-200 mb-1">
               {recipe.name}
             </h1>

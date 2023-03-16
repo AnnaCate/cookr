@@ -35,6 +35,7 @@ export function Form({
     recipeInstructions: recipeForm.recipeInstructions,
     recipeYield: recipeForm.recipeYield,
     suitableForDiet: recipeForm.suitableForDiet,
+    untested: recipeForm.untested,
   })
 
   const handleCategorySelection = (category: {
@@ -83,9 +84,16 @@ export function Form({
       HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement
     >,
   ) => {
+    let val: any
+
+    if (e.target.type === 'checkbox' && 'checked' in e.target) {
+      val = e.target.checked
+    } else {
+      val = e.target.value
+    }
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [e.target.name]: val,
     })
   }
 
@@ -118,6 +126,27 @@ export function Form({
       </div>
       <div className="my-7">
         <form id={formId} onSubmit={handleSubmit}>
+          <fieldset className="mb-6 flex items-center">
+            <input
+              id="untested"
+              name="untested"
+              type="checkbox"
+              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+              onChange={handleChange}
+              checked={form.untested}
+            />
+            <div className="ml-2 text-sm leading-6">
+              <label
+                htmlFor="untested"
+                className="font-semibold text-gray-900 text-base"
+              >
+                Check this box if you cannot vouch for this recipe{' '}
+                <span className="font-normal italic">
+                  (e.g. you'd like to make it someday, but haven't made it yet)
+                </span>
+              </label>
+            </div>
+          </fieldset>
           <Input
             handleChange={handleChange}
             label="Recipe Title"

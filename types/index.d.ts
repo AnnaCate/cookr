@@ -19,6 +19,7 @@ export namespace Recipe {
     originalSource?: string
     suitableForDiet?: string[]
     totalTime?: string
+    untested?: boolean
   }
 
   interface Existing extends Base {
@@ -55,6 +56,7 @@ export interface Tile {
   meal?: string
   originalSource?: string
   title: string
+  untested?: boolean
   user?: User
 }
 

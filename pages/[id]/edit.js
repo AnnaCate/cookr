@@ -64,6 +64,7 @@ function EditRecipe() {
     submittedBy: recipe.submittedBy,
     suitableForDiet: recipe.suitableForDiet,
     totalTime: recipe.totalTime,
+    untested: recipe.untested,
   }
 
   return (

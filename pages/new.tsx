@@ -25,6 +25,7 @@ const NewRecipe = () => {
     recipeYield: '',
     suitableForDiet: [],
     name: '',
+    untested: false,
   }
 
   const postData = async (form) => {

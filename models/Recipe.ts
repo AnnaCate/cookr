@@ -68,6 +68,7 @@ const RecipeSchema = new mongoose.Schema({
   },
   suitableForDiet: [String],
   totalTime: String,
+  untested: Boolean,
 })
 
 export default mongoose.models.Recipe || mongoose.model('Recipe', RecipeSchema)
