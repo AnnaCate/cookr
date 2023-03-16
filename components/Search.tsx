@@ -11,7 +11,7 @@ export const Search = (props: {
   return (
     <form
       id="search-container"
-      className="w-full my-4 mx-auto flex items-center justify-center"
+      className="w-full mt-4 sm:mt-0 mb-4 mx-auto flex items-center justify-center"
       onSubmit={(e) => {
         e.preventDefault()
         handleSearch()

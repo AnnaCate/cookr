@@ -3,14 +3,7 @@ import { useRouter } from 'next/router'
 import dbConnect from '../utils/dbConnect'
 import Recipe from '../models/Recipe'
 
-import {
-  Filter,
-  Layout,
-  Page,
-  PageHeader,
-  Pagination,
-  Search,
-} from '../components'
+import { Filter, Layout, Page, Pagination, Search } from '../components'
 
 type Props = {
   keywords: string[]
@@ -65,8 +58,7 @@ export default function Index(props: Props) {
 
   return (
     <Layout>
-      <PageHeader title="cookr" subtitle="keep your recipes organized." />
-      <div className={`mb-4 mt-4 flex-grow`}>
+      <div className={`mb-4 flex-grow`}>
         <Search setSearchQuery={setSearchQuery} />
         <div className="my-4">
           <Filter

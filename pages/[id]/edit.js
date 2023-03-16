@@ -70,7 +70,7 @@ function EditRecipe() {
   return (
     <Layout>
       <div className="mb-8">
-        <PageHeader title="edit a recipe" />
+        <PageHeader title="edit a recipe" center />
       </div>
       <Form
         formId="edit-recipe-form"
