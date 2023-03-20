@@ -12,7 +12,7 @@ type Props = {
 export default function Index(props: Props) {
   const router = useRouter()
   const { query } = router
-  const { page = 1 } = query
+  const { keywords, page = 1, recipeCategory, search, suitableForDiet } = query
   const parsedPage = parseInt(page as string)
 
   const [currPage, setCurrPage] = React.useState(parsedPage)
@@ -25,13 +25,13 @@ export default function Index(props: Props) {
   >([])
   const [totalNum, setTotalNum] = React.useState(0)
 
-  // Pagination
   const appendQueryParam = (key: string, value: string) => {
     router.push({
       pathname: router.pathname,
-      query: { [key]: encodeURI(value) },
+      query: { ...query, [key]: encodeURI(value) },
     })
   }
+
   const handlePaginate = (newPage: number) => {
     appendQueryParam('page', newPage.toString())
     setCurrPage(newPage)
@@ -50,6 +50,17 @@ export default function Index(props: Props) {
       setCurrPage(parsedPage)
     }
   }, [page])
+
+  React.useEffect(() => {
+    if (recipeCategory) {
+      const filters = [...filter]
+      filters.push({
+        type: 'recipeCategory',
+        filter: { label: '', value: recipeCategory as string },
+      })
+      setFilter(filters)
+    }
+  }, [recipeCategory])
 
   const opts = {
     searchQuery,

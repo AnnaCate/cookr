@@ -1,4 +1,6 @@
 import React from 'react'
+import { useRouter } from 'next/router'
+
 import { FilterDropdown } from './Dropdown'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faX } from '@fortawesome/free-solid-svg-icons'
@@ -19,6 +21,8 @@ type Props = {
 }
 
 export const Filter = (props: Props) => {
+  const router = useRouter()
+
   const [open, setOpen] = React.useState({
     recipeCategory: false,
     keywords: false,
@@ -31,6 +35,16 @@ export const Filter = (props: Props) => {
     suitableForDiet: 0,
   })
 
+  React.useEffect(() => {
+    console.log('props.filter', props.filter)
+    props.filter.forEach((f) => {
+      setNums({
+        ...nums,
+        [f.type]: nums[f.type] + 1,
+      })
+    })
+  }, [props.filter])
+
   const handleSelection = (
     criteria: 'recipeCategory' | 'keywords' | 'suitableForDiet',
     selection: { label: string; value: string },
@@ -42,6 +56,7 @@ export const Filter = (props: Props) => {
     const filterArray = [...props.filter]
 
     if (didDeselect) {
+      removeQueryParam(criteria, selection.value)
       setNums({
         ...nums,
         [criteria]: nums[criteria] - 1,
@@ -53,6 +68,8 @@ export const Filter = (props: Props) => {
       )
       props.setFilter(newArray)
     } else {
+      appendQueryParam(criteria, selection.value)
+
       setNums({
         ...nums,
         [criteria]: nums[criteria] + 1,
@@ -63,6 +80,33 @@ export const Filter = (props: Props) => {
       })
       props.setFilter(filterArray)
     }
+  }
+
+  const appendQueryParam = (key: string, val: string) => {
+    const { query } = router
+
+    let baseVal = ''
+
+    if (`${key}` in query) {
+      baseVal = query[key] + ',' + val
+    } else baseVal = val
+
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, [key]: encodeURI(baseVal) },
+    })
+  }
+
+  const removeQueryParam = (key: string, val: string) => {
+    const { query } = router
+
+    const baseVal = query[key]
+    const splitVals = (baseVal as string).split(',')
+    const newVals = splitVals.filter((v) => v !== val).join(',')
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, [key]: encodeURI(newVals) },
+    })
   }
 
   const handleOpenDropdown = (type: string) =>
@@ -165,7 +209,7 @@ export const Filter = (props: Props) => {
                   handleSelection(v.type, v.filter)
                 }}
               >
-                {v.filter.label}
+                {v.filter.label || v.filter.value}
                 <FontAwesomeIcon
                   className="text-gray-400 w-3 h-3 ml-2"
                   icon={faX}
