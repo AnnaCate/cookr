@@ -5,21 +5,6 @@ const IngredientSchema = new mongoose.Schema({
   ingredients: String,
 })
 
-const NutritionSchema = new mongoose.Schema({
-  calories: String,
-  carbohydrateContent: String,
-  cholesterolContent: String,
-  fatContent: String,
-  fiberContent: String,
-  proteinContent: String,
-  saturatedFatContent: String,
-  servingSize: String,
-  sodiumContent: String,
-  sugarContent: String,
-  transFatContent: String,
-  unsaturatedFatContent: String,
-})
-
 const RecipeSchema = new mongoose.Schema({
   complimentaryRecipes: {
     type: [mongoose.Schema.Types.ObjectId],
@@ -44,7 +29,6 @@ const RecipeSchema = new mongoose.Schema({
     required: [true, 'Please provide a title for this recipe.'],
     maxlength: [200, 'Title cannot be more than 200 characters'],
   },
-  nutrition: NutritionSchema,
   originalSource: String || {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Recipe',
