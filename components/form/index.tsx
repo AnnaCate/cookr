@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import { FaRegPlusSquare, FaTimesCircle } from 'react-icons/fa'
-import { Input } from './input'
+import { Input } from './TextInput'
 import { Dropdown } from '../'
 import { formatCategory } from '../../utils/format-category'
-import { IngredientsSubSection } from './IngredientSubSection'
+import { IngredientsSubSection } from './IngredientsSubSection'
 import { Recipe, IngredientSection } from '../../types'
 
 export function Form({
@@ -428,7 +428,7 @@ export function Form({
               type="submit"
               className="w-full max-w-xs py-4 text-white bg-indigo-500 hover:bg-indigo-600 rounded-xl focus:bg-indigo-600 focus:outline-none"
             >
-              Submit
+              {forNewRecipe ? 'Submit' : 'Save'}
             </button>
             <button
               onClick={() => router.back()}
