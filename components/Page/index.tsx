@@ -1,6 +1,7 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
+import Link from 'next/link'
 
 import { Tile } from '../'
 import { Recipe } from '../../types'
@@ -77,20 +78,22 @@ export const Page = ({
         {data &&
           data.recipes &&
           data.recipes.map((recipe: Recipe.Existing) => (
-            <div
+            <Link
               className="z-0 cursor-pointer w-full xs:w-auto mb-4 xs:mb-0"
               key={recipe._id}
-              onClick={() => router.push(`/${recipe._id}`)}
+              href={`/${recipe._id}`}
             >
-              <Tile
-                img={recipe.image}
-                meal={recipe.recipeCategory}
-                title={recipe.name}
-                user={recipe.submittedBy}
-                originalSource={recipe.originalSource}
-                untested={recipe.untested}
-              />
-            </div>
+              <a>
+                <Tile
+                  img={recipe.image}
+                  meal={recipe.recipeCategory}
+                  title={recipe.name}
+                  user={recipe.submittedBy}
+                  originalSource={recipe.originalSource}
+                  untested={recipe.untested}
+                />
+              </a>
+            </Link>
           ))}
       </div>
     </>
