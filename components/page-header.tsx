@@ -16,7 +16,7 @@ export function PageHeader(props: {
       </h1>
       {props.subtitle && (
         <h2
-          className={`w-full text-lg opacity-70 -mt-2 ${
+          className={`w-full text-lg opacity-70 mt-2 max-w-3xl mx-auto ${
             props.center ? 'text-center' : 'text-left'
           }`}
         >

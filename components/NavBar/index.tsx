@@ -25,6 +25,27 @@ export function NavBar() {
           <a className="font-sacramento w-full text-6xl -mb-2">cookr</a>
         </Link>
       </div>
+      <div className="hidden xs:flex justify-center items-center ml-6 md:ml-20">
+        <Link
+          href={{
+            pathname: '/',
+            query: { page: '1' },
+          }}
+        >
+          <a className="text-gray-700 no-underline w-full">All Recipes</a>
+        </Link>
+      </div>
+
+      <div className="flex justify-center items-center ml-10 md:ml-16">
+        <Link
+          href={{
+            pathname: '/pantry-meals',
+            query: { page: '1' },
+          }}
+        >
+          <a className="text-gray-700 no-underline w-full">Pantry Meals</a>
+        </Link>
+      </div>
 
       <div className="justify-end ml-auto items-stretch flex">
         <div className="items-center flex flex-grow-0 flex-shrink-0 text-gray-700">
