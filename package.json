@@ -6,6 +6,9 @@
     "build": "next build",
     "start": "next start"
   },
+  "engines": {
+    "node": "18.17.1"
+  },
   "dependencies": {
     "@auth0/nextjs-auth0": "^1.7.0",
     "@fortawesome/free-solid-svg-icons": "^6.1.0",
