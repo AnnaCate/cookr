@@ -2,8 +2,8 @@ import React from 'react'
  import { Switch } from '@headlessui/react'
 
 export const Search = (props: {
-  shuffle: boolean
-  setShuffle: React.Dispatch<React.SetStateAction<boolean>>
+  shuffle?: boolean
+  setShuffle?: React.Dispatch<React.SetStateAction<boolean>>
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>
 }) => {
   const [value, setValue] = React.useState('')
@@ -32,20 +32,24 @@ export const Search = (props: {
       >
         Search
       </button>
-      <Switch
-        checked={props.shuffle}
-        onChange={() => props.setShuffle(!props.shuffle)}
-        className={`${
-          props.shuffle ? 'bg-indigo-600' : 'bg-gray-200'
-        } mx-2 relative inline-flex h-6 w-11 items-center rounded-full`}
-      >
-        <span
-          className={`${
-            props.shuffle ? 'translate-x-6' : 'translate-x-1'
-          } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-        />
-      </Switch>
-      <p className="text-indigo-600 font-medium">Shuffle</p>
+      {props.setShuffle && 
+        <> 
+          <Switch
+            checked={props.shuffle}
+            onChange={() => props.setShuffle(!props.shuffle)}
+            className={`${
+              props.shuffle ? 'bg-indigo-600' : 'bg-gray-200'
+            } mx-2 relative inline-flex h-6 w-11 items-center rounded-full`}
+          >
+            <span
+              className={`${
+                props.shuffle ? 'translate-x-6' : 'translate-x-1'
+              } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+            />
+          </Switch>
+          <p className="text-indigo-600 font-medium">Shuffle</p>
+        </>
+        }
     </form>
   )
 }
