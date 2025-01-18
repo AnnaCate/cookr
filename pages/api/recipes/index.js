@@ -10,6 +10,7 @@ export default async function handler(req, res) {
     keywords = '',
     recipeCategory = '',
     search = '',
+    shuffle = false,
     skip = 0,
     suitableForDiet = '',
     userId,
@@ -65,12 +66,27 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const recipes = await Recipe.find(findQuery)
-          .populate('submittedBy', 'name')
-          .sort('name')
-          .skip(skipNum)
-          .limit(10)
+            let recipes;
 
+            if (shuffle === 'true') {
+              recipes = await Recipe.aggregate([
+                {
+                $match: findQuery
+                },
+                { $lookup: { from: 'users', localField: 'submittedBy', foreignField: '_id', as: 'submittedBy' } },
+                { $sample: { size: 10 } }
+              ])
+            } else {
+              recipes = await Recipe.aggregate([
+                {
+                $match: findQuery
+                },
+                { $lookup: { from: 'users', localField: 'submittedBy', foreignField: '_id', as: 'submittedBy' } },
+                { $sort: { name: 1 } },
+                { $skip: skipNum },
+                { $limit: 10 }
+              ])
+            }
         const totalNum = await Recipe.countDocuments(findQuery).exec()
         res.status(200).json({ success: true, data: { recipes, totalNum } })
       } catch (error) {
