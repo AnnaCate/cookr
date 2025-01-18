@@ -24,6 +24,7 @@ export default function Index(props: Props) {
     }[]
   >([])
   const [totalNum, setTotalNum] = React.useState(0)
+  const [shuffle, setShuffle] = React.useState(false)
 
   // Pagination
   const appendQueryParam = (key: string, value: string) => {
@@ -54,12 +55,13 @@ export default function Index(props: Props) {
   const opts = {
     searchQuery,
     filter,
+    shuffle
   }
 
   return (
     <Layout>
       <div className={`mb-4 flex-grow`}>
-        <Search setSearchQuery={setSearchQuery} />
+        <Search setSearchQuery={setSearchQuery} shuffle={shuffle} setShuffle={setShuffle} />
         <div className="my-4">
           <Filter
             filter={filter}
