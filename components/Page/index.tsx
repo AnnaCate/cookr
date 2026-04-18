@@ -28,11 +28,12 @@ export const Page = ({
     }[]
     searchQuery?: string
     shuffle?: boolean
+    toddlerFood?: boolean
     userId?: string
   }
 }) => {
   const router = useRouter()
-  const { filter = [], searchQuery = '', shuffle = false, userId = '' } = opts
+  const { filter = [], searchQuery = '', shuffle = false, toddlerFood = false, userId = '' } = opts
 
   const recipeCategoryFilters = filter
     .filter((v) => v.type === 'recipeCategory')
@@ -52,7 +53,7 @@ export const Page = ({
   const { data, error, mutate } = useSWR(
     `/api/recipes?skip=${
       (currPage - 1) * 10
-    }&search=${searchQuery}&userId=${userId}&recipeCategory=${recipeCategoryFilters}&keywords=${keywordsFilters}&suitableForDiet=${dietFilters}&shuffle=${shuffle}`,
+    }&search=${searchQuery}&userId=${userId}&recipeCategory=${recipeCategoryFilters}&keywords=${keywordsFilters}&suitableForDiet=${dietFilters}&shuffle=${shuffle}&toddlerFood=${toddlerFood}`,
     fetcher,
   )
 

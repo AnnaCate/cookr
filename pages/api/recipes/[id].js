@@ -27,9 +27,9 @@ export default async function handler(req, res) {
 
     case 'PUT' /* Edit a model by its ID */:
       try {
-        const recipe = await Recipe.findByIdAndUpdate(recipeId, req.body, {
+        const recipe = await Recipe.findByIdAndUpdate(recipeId, { $set: req.body }, {
           new: true,
-          runValidators: true,
+          strict: false,
         })
         if (!recipe) {
           return res.status(400).json({ success: false })

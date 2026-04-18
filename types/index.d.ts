@@ -19,6 +19,7 @@ export namespace Recipe {
     originalSource?: string
     suitableForDiet?: string[]
     totalTime?: string
+    toddlerFood?: boolean
     untested?: boolean
   }
 

@@ -63,6 +63,7 @@ function EditRecipe() {
     recipeYield: recipe.recipeYield,
     submittedBy: recipe.submittedBy,
     suitableForDiet: recipe.suitableForDiet,
+    toddlerFood: recipe.toddlerFood,
     totalTime: recipe.totalTime,
     untested: recipe.untested,
   }

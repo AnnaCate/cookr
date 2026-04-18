@@ -52,7 +52,10 @@ const RecipeSchema = new mongoose.Schema({
   },
   suitableForDiet: [String],
   totalTime: String,
+  toddlerFood: Boolean,
   untested: Boolean,
-})
+}, { strict: false })
 
-export default mongoose.models.Recipe || mongoose.model('Recipe', RecipeSchema)
+// Delete the cached model so schema changes take effect on hot reload in development
+delete mongoose.models['Recipe']
+export default mongoose.model('Recipe', RecipeSchema)

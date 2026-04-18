@@ -47,6 +47,17 @@ export function NavBar() {
         </Link>
       </div>
 
+      <div className="flex justify-center items-center ml-10 md:ml-16">
+        <Link
+          href={{
+            pathname: '/toddler-food',
+            query: { page: '1' },
+          }}
+        >
+          <a className="text-gray-700 no-underline w-full">Toddler Food</a>
+        </Link>
+      </div>
+
       <div className="justify-end ml-auto items-stretch flex">
         <div className="items-center flex flex-grow-0 flex-shrink-0 text-gray-700">
           <div className="items-center flex justify-start">

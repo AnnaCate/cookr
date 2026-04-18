@@ -13,6 +13,7 @@ export default async function handler(req, res) {
     shuffle = false,
     skip = 0,
     suitableForDiet = '',
+    toddlerFood = '',
     userId,
   } = query
 
@@ -50,6 +51,7 @@ export default async function handler(req, res) {
         })),
       }
     : {}
+  const toddlerFoodFilter = toddlerFood === 'true' ? { toddlerFood: true } : {}
 
   const findQuery = {
     $and: [
@@ -58,6 +60,7 @@ export default async function handler(req, res) {
       { ...recipeCategoryFilter },
       { ...keywordsFilter },
       { ...dietsFilter },
+      { ...toddlerFoodFilter },
     ],
   }
 
