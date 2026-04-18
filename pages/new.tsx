@@ -25,6 +25,7 @@ const NewRecipe = () => {
     recipeYield: '',
     suitableForDiet: [],
     name: '',
+    toddlerFood: false,
     untested: false,
   }
 

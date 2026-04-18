@@ -35,6 +35,7 @@ export function Form({
     recipeInstructions: recipeForm.recipeInstructions,
     recipeYield: recipeForm.recipeYield,
     suitableForDiet: recipeForm.suitableForDiet,
+    toddlerFood: recipeForm.toddlerFood ?? false,
     untested: recipeForm.untested,
   })
 
@@ -408,7 +409,7 @@ export function Form({
               </div>
             </fieldset>
           </div>
-          <div className="mb-6">
+          <div className="mb-4">
             <label className="c-input-label" htmlFor="keywords">
               Keywords
             </label>
@@ -423,6 +424,26 @@ export function Form({
               onChange={handleChange}
             />
           </div>
+          <fieldset className="mb-6 flex items-center">
+            <input
+              id="toddlerFood"
+              name="toddlerFood"
+              type="checkbox"
+              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+              onChange={handleChange}
+              checked={form.toddlerFood}
+            />
+            <div className="ml-2 text-sm leading-6">
+              <label
+                htmlFor="toddlerFood"
+                className="font-semibold text-gray-900 text-base"
+              >
+                Toddler Food
+              </label>
+            </div>
+          </fieldset>
+
+
           <div className="flex flex-col space-y-4 justify-center w-full items-center">
             <button
               type="submit"
