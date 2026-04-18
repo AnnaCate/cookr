@@ -7,7 +7,7 @@
     "start": "next start"
   },
   "engines": {
-    "node": "18.17.1"
+    "node": "24.x" 
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^1.7.0",
